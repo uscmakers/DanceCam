@@ -1,3 +1,1 @@
 # DanceCam
-
-hello!
