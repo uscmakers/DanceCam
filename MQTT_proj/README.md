@@ -122,19 +122,3 @@ mosquitto_pub -t "test/topic" -m "test message"
 # Check Mosquitto logs
 sudo tail -f /var/log/mosquitto/mosquitto.log
 ```
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/name`)
-3. Commit your changes (`git commit -am 'Add new feature'`)
-4. Push to the branch (`git push origin feature/name`)
-5. Create a Pull Request
-
-## License
-
-[Your chosen license]
-
-## Contact
-
-[Your team's contact information]
