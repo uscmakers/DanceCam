@@ -1,6 +1,6 @@
 # MQTT Client for RPi
 
-This package provides MQTT publishing and subscribing capabilities for our RPi project.
+This is an attempt at providing MQTT publishing and subscribing capabilities for the RPi.
 
 ## Installation
 
@@ -18,10 +18,4 @@ This package provides MQTT publishing and subscribing capabilities for our RPi p
    ```
 
 ## Usage
-
-See example.py for basic usage.
-
-## Configuration
-
-Edit config.py to modify MQTT broker settings and topics.
-"""
+See MQTT_Test.py for a testing file. If that works, we are in good shape.
