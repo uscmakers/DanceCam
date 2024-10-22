@@ -1,5 +1,3 @@
-"""
-
 # MQTT Client for RPi
 
 This package provides MQTT publishing and subscribing capabilities for our RPi project.
