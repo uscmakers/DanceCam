@@ -13,6 +13,8 @@ def get_data():
 def receive_data():
     data = request.json
     # process received data here
+    print("Received data!")
+    print(data)
     return jsonify({"status": "received"})
 
 if __name__ == '__main__':
