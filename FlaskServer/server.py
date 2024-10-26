@@ -7,7 +7,7 @@ app = Flask(__name__)
 def get_data():
     # dummy response
     return jsonify({"status": "success", "data": "Hello from Raspberry Pi"})
-
+ 
 # route to retrieve data 
 @app.route('/api/data', methods=['POST'])
 def receive_data():
