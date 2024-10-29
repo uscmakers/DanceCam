@@ -8,11 +8,14 @@ def get_data():
     # dummy response
     return jsonify({"status": "success", "data": "Hello from Raspberry Pi"})
 
-# route to retrieve data 
-@app.route('/api/data', methods=['POST'])
+
+# route to retrieve data
+@app.route("/api/post", methods=["POST"])
 def receive_data():
     data = request.json
     # process received data here
+    print("Received data!")
+    print(data)
     return jsonify({"status": "received"})
 
 if __name__ == '__main__':
