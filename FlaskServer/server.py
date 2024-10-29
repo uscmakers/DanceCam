@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 # route to get data 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def get_data():
     # dummy response
     return jsonify({"status": "success", "data": "Hello from Raspberry Pi"})
