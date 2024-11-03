@@ -25,4 +25,4 @@ def handle_request():
 # Running the API
 if __name__ == "__main__":
     # Setting host = "0.0.0.0" runs it on localhost
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=8000, debug=True)
