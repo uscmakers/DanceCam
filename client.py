@@ -9,4 +9,5 @@ headers = {'Content-type': 'application/json'}
 # Sending a post request to the server (API)
 response = requests.post(url="http://0.0.0.0:5000/", data=json.dumps(payload), headers=headers)
 # Printing out the response of API
+print(response.status_code)
 print(response.text)
