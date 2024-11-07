@@ -1,7 +1,3 @@
 # DanceCam
 
-Abby Farhat :)
-
-Bark Bark Kenny
-
-Hannah Leeee
+Irith Katiyar, Abby Farhat, Kenny Nguyen, Austin Tsai, Hannah Lee
