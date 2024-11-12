@@ -37,6 +37,14 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
        }
         
         setupCamera()
+        
+//        sendData(duty1: 1000, duty2: 1000, duty3: 1000, duty4: 1000)
+//        Thread.sleep(forTimeInterval: 2.0)
+//        sendData(duty1: 0, duty2: 0, duty3: 0, duty4: 0)
+//        Thread.sleep(forTimeInterval: 2.0)
+//        sendData(duty1: -1000, duty2: -1000, duty3: -1000, duty4: -1000)
+//        Thread.sleep(forTimeInterval: 2.0)
+//        sendData(duty1: 0, duty2: 0, duty3: 0, duty4: 0)
     }
     
     private func setupCamera() {
@@ -89,10 +97,11 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
         guard let newLandmarks = result?.landmarks else {
             return
         }
-        
         poses = newLandmarks
-        
+        // TODO: MATH
         // TODO: send to rpi
+        sendData(duty1:0,duty2:0,duty3:0,duty4:0)
+        
     } else {
         print("Failed to detect with error: \(error.debugDescription)")
     }
@@ -148,4 +157,51 @@ struct ContentView: View {
             )
         }
     }
+}
+
+func sendData(duty1: Int, duty2: Int, duty3: Int, duty4: Int) {
+    guard let url = URL(string: "http://172.20.10.2:8000/move") else { return }
+    
+    // Create a URLRequest object
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    
+    // Add headers (e.g., Content-Type for JSON)
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+    // Create the body data
+    let data: [String: Any] = [
+        "duty1": duty1,
+        "duty2": duty2,
+        "duty3": duty3,
+        "duty4": duty4,
+    ]
+    
+    // Convert data dictionary to JSON and set to request body
+    do {
+        request.httpBody = try JSONSerialization.data(withJSONObject: data, options: [])
+    } catch {
+        print("Error serializing JSON: \(error)")
+        return
+    }
+    
+    // Create a URLSession task
+    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            print("Error: \(error.localizedDescription)")
+            return
+        }
+        
+        if let httpResponse = response as? HTTPURLResponse {
+            print("Status Code: \(httpResponse.statusCode)")
+        }
+        
+        if let data = data {
+            let responseString = String(data: data, encoding: .utf8)
+            print("Response: \(responseString ?? "")")
+        }
+    }
+    
+    // Start the task
+    task.resume()
 }
