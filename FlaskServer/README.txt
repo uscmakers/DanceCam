@@ -1,1 +1,0 @@
-The code will be used to create a HTTP REST API server on the Raspberry Pi 
