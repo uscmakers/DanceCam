@@ -22,29 +22,29 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
     
     override init() {
         super.init()
+//        
+//        // Initialize PoseLandmarker with default settings
+//        let options = PoseLandmarkerOptions()
+//        options.baseOptions.modelAssetPath = Bundle.main.path(forResource: "pose_landmarker_lite", ofType: "task")!
+//        options.runningMode = .liveStream
+//        options.poseLandmarkerLiveStreamDelegate = self
+//        options.numPoses = 17
+//
+//        do {
+//            poseLandmarker = try PoseLandmarker(options: options)
+//        } catch {
+//           fatalError("Failed to initialize pose landmarker: \(error)")
+//       }
+//        
+//        setupCamera()
         
-        // Initialize PoseLandmarker with default settings
-        let options = PoseLandmarkerOptions()
-        options.baseOptions.modelAssetPath = Bundle.main.path(forResource: "pose_landmarker_lite", ofType: "task")!
-        options.runningMode = .liveStream
-        options.poseLandmarkerLiveStreamDelegate = self
-        options.numPoses = 17
-
-        do {
-            poseLandmarker = try PoseLandmarker(options: options)
-        } catch {
-           fatalError("Failed to initialize pose landmarker: \(error)")
-       }
-        
-        setupCamera()
-        
-//        sendData(duty1: 1000, duty2: 1000, duty3: 1000, duty4: 1000)
-//        Thread.sleep(forTimeInterval: 2.0)
-//        sendData(duty1: 0, duty2: 0, duty3: 0, duty4: 0)
-//        Thread.sleep(forTimeInterval: 2.0)
-//        sendData(duty1: -1000, duty2: -1000, duty3: -1000, duty4: -1000)
-//        Thread.sleep(forTimeInterval: 2.0)
-//        sendData(duty1: 0, duty2: 0, duty3: 0, duty4: 0)
+        sendData(duty1: 1000, duty2: 1000, duty3: 1000, duty4: 1000)
+        Thread.sleep(forTimeInterval: 2.0)
+        sendData(duty1: 0, duty2: 0, duty3: 0, duty4: 0)
+        Thread.sleep(forTimeInterval: 2.0)
+        sendData(duty1: -1000, duty2: -1000, duty3: -1000, duty4: -1000)
+        Thread.sleep(forTimeInterval: 2.0)
+        sendData(duty1: 0, duty2: 0, duty3: 0, duty4: 0)
     }
     
     private func setupCamera() {
