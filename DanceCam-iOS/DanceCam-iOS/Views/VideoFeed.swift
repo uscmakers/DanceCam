@@ -10,7 +10,7 @@ import AVFoundation
 
 // MARK: - Camera Preview
 struct CameraPreview: UIViewRepresentable {
-    let session: AVCaptureSession
+    let session: AVCaptureSession    
     
     func makeUIView(context: Context) -> UIView {
         let view = UIView(frame: UIScreen.main.bounds)
@@ -26,7 +26,11 @@ struct CameraPreview: UIViewRepresentable {
 
 // MARK: - Main View
 struct VideoFeed: View {
-    @StateObject private var cameraManager = CameraManager()
+    @StateObject private var cameraManager: CameraManager
+    
+    init(captureSession: AVCaptureSession) {
+        _cameraManager = StateObject(wrappedValue: CameraManager())
+    }
     
     var body: some View {
         ZStack {
@@ -37,6 +41,9 @@ struct VideoFeed: View {
                 poses: cameraManager.poses,
                 size: UIScreen.main.bounds.size
             )
-        }
+        }.overlay(
+            VideoControls(cameraManager: cameraManager),
+            alignment: .bottom
+        )
     }
 }

@@ -5,6 +5,6 @@ struct ContentView: View {
     @StateObject private var cameraManager = CameraManager()
     
     var body: some View {
-        VideoFeed()
+        VideoFeed(captureSession: cameraManager.captureSession)
     }
 }
