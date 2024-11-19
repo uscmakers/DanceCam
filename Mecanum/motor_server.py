@@ -55,11 +55,14 @@ def handle_move_request():
     # make sure there are 4 numbers
     try:
         # duty_cycle = process_json(data)
-        duty_cycle = data['x1']
+        duty1 = data['duty1']
+        duty2 = data['duty2']
+        duty3 = data['duty3']
+        duty4 = data['duty4']
     except ValueError:
         return jsonify({"error": "All values must be numbers"}), 400
 
-    PWM.setMotorModel(duty_cycle, duty_cycle, duty_cycle, duty_cycle)
+    PWM.setMotorModel(duty1, duty2, duty3, duty4)
 
     return jsonify({"status": "Successfully triggered motors"})
 
