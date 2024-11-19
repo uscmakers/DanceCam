@@ -35,10 +35,11 @@ def handle_request():
 
 
 def process_json(data):
+    img_width = 1080
     distance = data['distance']
-    speed = (abs(distance)/img_width/2)*4096
+    speed = (abs(distance)/2.0/img_width)*4096
     direction = 1 if distance > 0 else -1
-    return speed*direction
+    return math.floor(speed*direction)
 
 """
     Endpoint for sending signal to motors
