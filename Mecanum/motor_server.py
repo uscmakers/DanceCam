@@ -34,6 +34,12 @@ def handle_request():
         return jsonify(response)
 
 
+def process_json(data):
+    distance = data['distance']
+    speed = (abs(distance)/img_width/2)*4096
+    direction = 1 if distance > 0 else -1
+    return speed*direction
+
 """
     Endpoint for sending signal to motors
 """
@@ -46,19 +52,12 @@ def handle_move_request():
     data = request.get_json()
 
     # make sure there are 4 numbers
-    if not all(key in data for key in ("duty1", "duty2", "duty3", "duty4")):
-        return jsonify({"error": "Missing one or more required numbers"}), 400
-
-    # extract numbers and save
     try:
-        x1 = data["duty1"]
-        x2 = data["duty2"]
-        x3 = data["duty3"]
-        x4 = data["duty4"]
+        duty_cycle = process_json(data)
     except ValueError:
         return jsonify({"error": "All values must be numbers"}), 400
 
-    PWM.setMotorModel(x1, x2, x3, x4)
+    PWM.setMotorModel(duty_cycle, duty_cycle, duty_cycle, duty_cycle)
 
     return jsonify({"status": "Successfully triggered motors"})
 
