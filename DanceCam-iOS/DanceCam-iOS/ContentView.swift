@@ -22,29 +22,29 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
     
     override init() {
         super.init()
-//        
-//        // Initialize PoseLandmarker with default settings
-//        let options = PoseLandmarkerOptions()
-//        options.baseOptions.modelAssetPath = Bundle.main.path(forResource: "pose_landmarker_lite", ofType: "task")!
-//        options.runningMode = .liveStream
-//        options.poseLandmarkerLiveStreamDelegate = self
-//        options.numPoses = 17
-//
-//        do {
-//            poseLandmarker = try PoseLandmarker(options: options)
-//        } catch {
-//           fatalError("Failed to initialize pose landmarker: \(error)")
-//       }
-//        
-//        setupCamera()
         
-        sendData(duty1: 1000, duty2: 1000, duty3: 1000, duty4: 1000)
-        Thread.sleep(forTimeInterval: 2.0)
-        sendData(duty1: 0, duty2: 0, duty3: 0, duty4: 0)
-        Thread.sleep(forTimeInterval: 2.0)
-        sendData(duty1: -1000, duty2: -1000, duty3: -1000, duty4: -1000)
-        Thread.sleep(forTimeInterval: 2.0)
-        sendData(duty1: 0, duty2: 0, duty3: 0, duty4: 0)
+        // Initialize PoseLandmarker with default settings
+        let options = PoseLandmarkerOptions()
+        options.baseOptions.modelAssetPath = Bundle.main.path(forResource: "pose_landmarker_lite", ofType: "task")!
+        options.runningMode = .liveStream
+        options.poseLandmarkerLiveStreamDelegate = self
+        options.numPoses = 17
+
+        do {
+            poseLandmarker = try PoseLandmarker(options: options)
+        } catch {
+           fatalError("Failed to initialize pose landmarker: \(error)")
+       }
+        
+        setupCamera()
+        
+//        sendData(duty1: 1000, duty2: 1000, duty3: 1000, duty4: 1000)
+//        Thread.sleep(forTimeInterval: 2.0)
+//        sendData(duty1: 0, duty2: 0, duty3: 0, duty4: 0)
+//        Thread.sleep(forTimeInterval: 2.0)
+//        sendData(duty1: -1000, duty2: -1000, duty3: -1000, duty4: -1000)
+//        Thread.sleep(forTimeInterval: 2.0)
+//        sendData(duty1: 0, duty2: 0, duty3: 0, duty4: 0)
     }
     
     private func setupCamera() {
@@ -98,9 +98,24 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
             return
         }
         poses = newLandmarks
-        // TODO: MATH
-        // TODO: send to rpi
-        sendData(duty1:0,duty2:0,duty3:0,duty4:0)
+        if(poses.count > 0) {
+            let pose = poses[0]
+            var xValues: [Float] = []
+            var yValues: [Float] = []
+            
+            for landmark in pose {
+                xValues.append(landmark.x)
+                yValues.append(landmark.y)
+            }
+            let xMin: Float = xValues.min()!
+            let xMax: Float = xValues.max()!
+            let yMin: Float = yValues.min()!
+            let yMax: Float = yValues.max()!
+            
+            let cX: Float = (xMin + xMax) / 2
+            let cY: Float = (yMin + yMax) / 2
+        }
+//        sendData(duty1:0,duty2:0,duty3:0,duty4:0)
         
     } else {
         print("Failed to detect with error: \(error.debugDescription)")
