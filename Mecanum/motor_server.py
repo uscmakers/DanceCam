@@ -11,29 +11,6 @@ from flask import Flask, request, jsonify
 # Initiating a Flask application
 app = Flask(__name__)
 
-"""
-    Simple end point for testing functionality 
-"""
-
-
-@app.route(rule="/", methods=["GET", "POST"])
-def handle_request():
-    # The GET endpoint
-    if request.method == "GET":
-        return "This is the GET Endpoint of flask API."
-
-    # The POST endpoint
-    if request.method == "POST":
-        # accessing the passed payload
-        payload = request.get_json()
-        # capitalizing the text
-        cap_text = payload["text"].upper()
-        # Creating a proper response
-        response = {"cap-text": cap_text}
-        # return the response as JSON
-        return jsonify(response)
-
-
 # def process_json(data):
 #     img_width = 1080
 #     distance = data['distance']

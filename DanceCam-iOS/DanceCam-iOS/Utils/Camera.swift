@@ -261,14 +261,14 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 let dX: Float = cX - cW
                 let dY: Float = cY - cH
                 
-                let maxDuty: Int = 4095
-                let dutyY: Int = Int(dY/frameHeight/2)*maxDuty
-                
-                if RUN_MOTOR { sendData(duty1:dutyY,duty2:dutyY,duty3:-dutyY,duty4:-dutyY) }
+                let maxDuty: Float = 4096
+                let dutyY: Int = Int(dY/frameHeight/2*maxDuty)
+                print(dutyY)
+                if RUN_MOTOR { sendMove(duty1:dutyY,duty2:dutyY,duty3:-dutyY,duty4:-dutyY) }
                 
             } else {
                 // Stop moving if no bodies detected
-                if RUN_MOTOR { sendData(duty1:0,duty2:0,duty3:0,duty4:0) }
+                if RUN_MOTOR { sendStop() }
             }
             
         }
