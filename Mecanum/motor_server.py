@@ -34,12 +34,12 @@ def handle_request():
         return jsonify(response)
 
 
-def process_json(data):
-    img_width = 1080
-    distance = data['distance']
-    speed = (abs(distance)/2.0/img_width)*4096
-    direction = 1 if distance > 0 else -1
-    return math.floor(speed*direction)
+# def process_json(data):
+#     img_width = 1080
+#     distance = data['distance']
+#     speed = (abs(distance)/2.0/img_width)*4096
+#     direction = 1 if distance > 0 else -1
+#     return math.floor(speed*direction)
 
 """
     Endpoint for sending signal to motors
@@ -54,7 +54,8 @@ def handle_move_request():
 
     # make sure there are 4 numbers
     try:
-        duty_cycle = process_json(data)
+        # duty_cycle = process_json(data)
+        duty_cycle = data['x1']
     except ValueError:
         return jsonify({"error": "All values must be numbers"}), 400
 
