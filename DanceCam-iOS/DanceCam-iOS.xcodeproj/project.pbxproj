@@ -18,6 +18,7 @@
 		0799CB572CEC462400215739 /* Landmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0799CB562CEC462200215739 /* Landmarks.swift */; };
 		0799CB5D2CEC46BE00215739 /* Communcation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0799CB5C2CEC46B800215739 /* Communcation.swift */; };
 		D3D63FC60F3CC5A542D44B06 /* Pods_DanceCam_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BDA204C630A21F6DE7ACA44 /* Pods_DanceCam_iOS.framework */; };
+		FC2E02222CEC83DE007C1F74 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2E02212CEC83D8007C1F74 /* Config.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		1BDA204C630A21F6DE7ACA44 /* Pods_DanceCam_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DanceCam_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7932684829B1AC3544DD1D11 /* Pods-DanceCam-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DanceCam-iOS.release.xcconfig"; path = "Target Support Files/Pods-DanceCam-iOS/Pods-DanceCam-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		7B8EC142B5C7F45EDA271A8A /* Pods-DanceCam-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DanceCam-iOS.debug.xcconfig"; path = "Target Support Files/Pods-DanceCam-iOS/Pods-DanceCam-iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		FC2E02212CEC83D8007C1F74 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -101,6 +103,7 @@
 		0799CB522CEC45AA00215739 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				FC2E02212CEC83D8007C1F74 /* Config.swift */,
 				0799CB5C2CEC46B800215739 /* Communcation.swift */,
 				0799CB532CEC45ED00215739 /* Camera.swift */,
 			);
@@ -236,6 +239,7 @@
 			files = (
 				0792B19A2CD9DED8008284A8 /* ContentView.swift in Sources */,
 				0792B19B2CD9DED8008284A8 /* DanceCam_iOSApp.swift in Sources */,
+				FC2E02222CEC83DE007C1F74 /* Config.swift in Sources */,
 				0799CB542CEC45EE00215739 /* Camera.swift in Sources */,
 				0799CB5D2CEC46BE00215739 /* Communcation.swift in Sources */,
 				0799CB572CEC462400215739 /* Landmarks.swift in Sources */,
@@ -374,7 +378,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DanceCam-iOS/Preview Content\"";
-				DEVELOPMENT_TEAM = 356NHLCA3T;
+				DEVELOPMENT_TEAM = 79XZXQ68F6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DanceCam-iOS/Info.plist";
@@ -409,7 +413,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DanceCam-iOS/Preview Content\"";
-				DEVELOPMENT_TEAM = 356NHLCA3T;
+				DEVELOPMENT_TEAM = 79XZXQ68F6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DanceCam-iOS/Info.plist";

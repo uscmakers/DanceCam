@@ -9,6 +9,10 @@ import MediaPipeTasksVision
 import AVFoundation
 import Photos
 
+// Image frame width and height
+var frameWidth: Float = 0
+var frameHeight: Float = 0
+
 // MARK: - Camera Manager
 class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     public let captureSession = AVCaptureSession()
@@ -28,10 +32,10 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
         
         // Initialize PoseLandmarker with default settings
         let options = PoseLandmarkerOptions()
-        options.baseOptions.modelAssetPath = Bundle.main.path(forResource: "pose_landmarker_lite", ofType: "task")!
+        options.baseOptions.modelAssetPath = Bundle.main.path(forResource: MODEL, ofType: MODEL_EXT)!
         options.runningMode = .liveStream
         options.poseLandmarkerLiveStreamDelegate = self
-        options.numPoses = 17
+        options.numPoses = 1 // Maximum number of poses detected by the pose landmarker (i.e., total number of dancers)
 
         do {
             poseLandmarker = try PoseLandmarker(options: options)
@@ -52,15 +56,6 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
         if captureSession.canAddOutput(movieFileOutput!) {
             captureSession.addOutput(movieFileOutput!)
         }
-
-        
-//        sendData(duty1: 1000, duty2: 1000, duty3: 1000, duty4: 1000)
-//        Thread.sleep(forTimeInterval: 2.0)
-//        sendData(duty1: 0, duty2: 0, duty3: 0, duty4: 0)
-//        Thread.sleep(forTimeInterval: 2.0)
-//        sendData(duty1: -1000, duty2: -1000, duty3: -1000, duty4: -1000)
-//        Thread.sleep(forTimeInterval: 2.0)
-//        sendData(duty1: 0, duty2: 0, duty3: 0, duty4: 0)
     }
     
     private func setupCamera() {
@@ -144,7 +139,8 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let image = try? MPImage(sampleBuffer: sampleBuffer) else { return }
-        
+        frameWidth = Float(image.width)
+        frameHeight = Float(image.height)
         do {
             try poseLandmarker?.detectAsync(image: image, timestampInMilliseconds: Int(Date().timeIntervalSince1970 * 1000))
         } catch {
@@ -239,7 +235,11 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
         DispatchQueue.main.async { [weak self] in
             self?.poses = newLandmarks
             
-            if let pose = newLandmarks.first {
+            if(self?.poses.count ?? 0 > 0) {
+                guard let pose = self?.poses[0] else {
+                    print("Failed to unwrap pose")
+                    return
+                }
                 var xValues: [Float] = []
                 var yValues: [Float] = []
                 
@@ -247,18 +247,30 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                     xValues.append(landmark.x)
                     yValues.append(landmark.y)
                 }
-                
                 let xMin: Float = xValues.min()!
                 let xMax: Float = xValues.max()!
                 let yMin: Float = yValues.min()!
                 let yMax: Float = yValues.max()!
                 
-                let cX: Float = (xMin + xMax) / 2
-                let cY: Float = (yMin + yMax) / 2
+                let cX: Float = ((xMin + xMax)/2)*frameWidth
+                let cY: Float = ((yMin + yMax)/2)*frameHeight
                 
-                // Use cX and cY as needed
+                let cW: Float = frameWidth/2
+                let cH: Float = frameHeight/2
+                
+                let dX: Float = cX - cW
+                let dY: Float = cY - cH
+                
+                let maxDuty: Int = 4095
+                let dutyY: Int = Int(dY/frameHeight/2)*maxDuty
+                
+                if RUN_MOTOR { sendData(duty1:dutyY,duty2:dutyY,duty3:-dutyY,duty4:-dutyY) }
+                
+            } else {
+                // Stop moving if no bodies detected
+                if RUN_MOTOR { sendData(duty1:0,duty2:0,duty3:0,duty4:0) }
             }
-            //        sendData(duty1:0,duty2:0,duty3:0,duty4:0)
+            
         }
     } else {
         print("Failed to detect with error: \(error.debugDescription)")
