@@ -18,6 +18,7 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
     
     @Published var isRecording = false
     @Published var isFlipping = false
+    @Published var isConfigured = false
     @Published var currentPosition: AVCaptureDevice.Position = .front
     @Published var lastError: String?
     @Published var poses: [[NormalizedLandmark]] = []
@@ -40,6 +41,7 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
         
         setupCamera()
         checkPhotoLibraryPermission()
+        setupAudio()
         
         if let currentMovieOutput = movieFileOutput {
             captureSession.removeOutput(currentMovieOutput)
@@ -86,6 +88,41 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
         } catch {
             print("Failed to setup camera: \(error)")
         }
+    }
+    
+    private func setupAudio() {
+        // Request audio permission
+        AVCaptureDevice.requestAccess(for: .audio) { [weak self] granted in
+            guard granted else {
+                DispatchQueue.main.async {
+                    self?.lastError = "Microphone access denied"
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self?.configureAudioInput()
+            }
+        }
+    }
+    
+    private func configureAudioInput() {
+        guard let audioDevice = AVCaptureDevice.default(for: .audio),
+              let audioInput = try? AVCaptureDeviceInput(device: audioDevice) else {
+            lastError = "Unable to configure audio input"
+            return
+        }
+        
+        captureSession.beginConfiguration()
+        
+        if captureSession.canAddInput(audioInput) {
+            captureSession.addInput(audioInput)
+            isConfigured = true
+        } else {
+            lastError = "Unable to add audio input to session"
+        }
+        
+        captureSession.commitConfiguration()
     }
     
     private func checkPhotoLibraryPermission() {

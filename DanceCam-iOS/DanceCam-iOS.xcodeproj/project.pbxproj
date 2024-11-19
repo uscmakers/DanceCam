@@ -10,11 +10,13 @@
 		0737540D2CD9E0D800C330E9 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 0737540C2CD9E0D800C330E9 /* .gitignore */; };
 		073754102CD9E14200C330E9 /* pose_landmarker_full.task in Resources */ = {isa = PBXBuildFile; fileRef = 0737540E2CD9E14200C330E9 /* pose_landmarker_full.task */; };
 		073754112CD9E14200C330E9 /* pose_landmarker_lite.task in Resources */ = {isa = PBXBuildFile; fileRef = 0737540F2CD9E14200C330E9 /* pose_landmarker_lite.task */; };
-		073754132CD9E14900C330E9 /* pose_landmarker_heavy.task in Resources */ = {isa = PBXBuildFile; fileRef = 073754122CD9E14900C330E9 /* pose_landmarker_heavy.task */; };
 		0792B1982CD9DED8008284A8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0792B1922CD9DED8008284A8 /* Preview Assets.xcassets */; };
 		0792B1992CD9DED8008284A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0792B1942CD9DED8008284A8 /* Assets.xcassets */; };
 		0792B19A2CD9DED8008284A8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792B1952CD9DED8008284A8 /* ContentView.swift */; };
 		0792B19B2CD9DED8008284A8 /* DanceCam_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792B1962CD9DED8008284A8 /* DanceCam_iOSApp.swift */; };
+		0799CB542CEC45EE00215739 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0799CB532CEC45ED00215739 /* Camera.swift */; };
+		0799CB572CEC462400215739 /* Landmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0799CB562CEC462200215739 /* Landmarks.swift */; };
+		0799CB5D2CEC46BE00215739 /* Communcation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0799CB5C2CEC46B800215739 /* Communcation.swift */; };
 		D3D63FC60F3CC5A542D44B06 /* Pods_DanceCam_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BDA204C630A21F6DE7ACA44 /* Pods_DanceCam_iOS.framework */; };
 /* End PBXBuildFile section */
 
@@ -22,13 +24,15 @@
 		0737540C2CD9E0D800C330E9 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		0737540E2CD9E14200C330E9 /* pose_landmarker_full.task */ = {isa = PBXFileReference; lastKnownFileType = file; path = pose_landmarker_full.task; sourceTree = "<group>"; };
 		0737540F2CD9E14200C330E9 /* pose_landmarker_lite.task */ = {isa = PBXFileReference; lastKnownFileType = file; path = pose_landmarker_lite.task; sourceTree = "<group>"; };
-		073754122CD9E14900C330E9 /* pose_landmarker_heavy.task */ = {isa = PBXFileReference; lastKnownFileType = file; path = pose_landmarker_heavy.task; sourceTree = "<group>"; };
 		073754312CDC4EFA00C330E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		0792B1812CD9DDDE008284A8 /* DanceCam-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DanceCam-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0792B1922CD9DED8008284A8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0792B1942CD9DED8008284A8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0792B1952CD9DED8008284A8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0792B1962CD9DED8008284A8 /* DanceCam_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DanceCam_iOSApp.swift; sourceTree = "<group>"; };
+		0799CB532CEC45ED00215739 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		0799CB562CEC462200215739 /* Landmarks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Landmarks.swift; sourceTree = "<group>"; };
+		0799CB5C2CEC46B800215739 /* Communcation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Communcation.swift; sourceTree = "<group>"; };
 		1BDA204C630A21F6DE7ACA44 /* Pods_DanceCam_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DanceCam_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7932684829B1AC3544DD1D11 /* Pods-DanceCam-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DanceCam-iOS.release.xcconfig"; path = "Target Support Files/Pods-DanceCam-iOS/Pods-DanceCam-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		7B8EC142B5C7F45EDA271A8A /* Pods-DanceCam-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DanceCam-iOS.debug.xcconfig"; path = "Target Support Files/Pods-DanceCam-iOS/Pods-DanceCam-iOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -79,6 +83,8 @@
 		0792B1972CD9DED8008284A8 /* DanceCam-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				0799CB552CEC461700215739 /* Models */,
+				0799CB522CEC45AA00215739 /* Utils */,
 				073754312CDC4EFA00C330E9 /* Info.plist */,
 				0737540B2CD9E0C800C330E9 /* Views */,
 				0792B1932CD9DED8008284A8 /* Preview Content */,
@@ -87,10 +93,26 @@
 				0792B1962CD9DED8008284A8 /* DanceCam_iOSApp.swift */,
 				0737540C2CD9E0D800C330E9 /* .gitignore */,
 				0737540E2CD9E14200C330E9 /* pose_landmarker_full.task */,
-				073754122CD9E14900C330E9 /* pose_landmarker_heavy.task */,
 				0737540F2CD9E14200C330E9 /* pose_landmarker_lite.task */,
 			);
 			path = "DanceCam-iOS";
+			sourceTree = "<group>";
+		};
+		0799CB522CEC45AA00215739 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				0799CB5C2CEC46B800215739 /* Communcation.swift */,
+				0799CB532CEC45ED00215739 /* Camera.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		0799CB552CEC461700215739 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0799CB562CEC462200215739 /* Landmarks.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		1B977C13C2EB0A15118244B1 /* Frameworks */ = {
@@ -176,7 +198,6 @@
 				073754102CD9E14200C330E9 /* pose_landmarker_full.task in Resources */,
 				073754112CD9E14200C330E9 /* pose_landmarker_lite.task in Resources */,
 				0737540D2CD9E0D800C330E9 /* .gitignore in Resources */,
-				073754132CD9E14900C330E9 /* pose_landmarker_heavy.task in Resources */,
 				0792B1992CD9DED8008284A8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -215,6 +236,9 @@
 			files = (
 				0792B19A2CD9DED8008284A8 /* ContentView.swift in Sources */,
 				0792B19B2CD9DED8008284A8 /* DanceCam_iOSApp.swift in Sources */,
+				0799CB542CEC45EE00215739 /* Camera.swift in Sources */,
+				0799CB5D2CEC46BE00215739 /* Communcation.swift in Sources */,
+				0799CB572CEC462400215739 /* Landmarks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,19 +370,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DanceCam-iOS/Preview Content\"";
-				DEVELOPMENT_TEAM = 79XZXQ68F6;
+				DEVELOPMENT_TEAM = 356NHLCA3T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DanceCam-iOS/Info.plist";
-				INFOPLIST_KEY_NSCameraUsageDescription = "${PRODUCT_NAME} requires access to your phone's camera";
+				INFOPLIST_KEY_NSCameraUsageDescription = "DanceCam-iOS requires access to your phone's camera";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "DanceCam-iOS requires access to your phone's photo library";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -366,6 +392,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dancecam.DanceCam-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -378,19 +405,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DanceCam-iOS/Preview Content\"";
-				DEVELOPMENT_TEAM = 79XZXQ68F6;
+				DEVELOPMENT_TEAM = 356NHLCA3T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DanceCam-iOS/Info.plist";
-				INFOPLIST_KEY_NSCameraUsageDescription = "${PRODUCT_NAME} requires access to your phone's camera";
+				INFOPLIST_KEY_NSCameraUsageDescription = "DanceCam-iOS requires access to your phone's camera";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "DanceCam-iOS requires access to your phone's photo library";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -398,6 +427,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dancecam.DanceCam-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

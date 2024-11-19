@@ -7,8 +7,29 @@
 
 import SwiftUI
 
+struct RecordButton: View {
+    @StateObject var cameraManager: CameraManager
+    
+    var body: some View {
+        Button(action: {
+            if !cameraManager.isRecording {
+                cameraManager.startRecording();
+            } else {
+                cameraManager.stopRecording();
+            }
+        }) {
+            Image(systemName: cameraManager.isRecording  ? "stop.circle.fill" : "record.circle")
+                .font(.system(size: 60))
+                .foregroundColor(cameraManager.isRecording ? .red : .white)
+        }
+    }
+}
+
 struct FlipCameraButton: View {
-    @ObservedObject var cameraManager: CameraManager
+    @StateObject var cameraManager: CameraManager
+    var disabled: Bool {
+        return cameraManager.isFlipping || cameraManager.isRecording
+    }
     
     var body: some View {
         Button(action: {
@@ -22,8 +43,8 @@ struct FlipCameraButton: View {
                 .rotationEffect(.degrees(cameraManager.isFlipping ? 180 : 0))
                 .padding()
                 .background(Circle().fill(Color.black.opacity(0.6)))
-                .disabled(cameraManager.isFlipping)
         }
+        .disabled(disabled).opacity(disabled ? 0.5 : 1)
     }
 }
 
@@ -36,23 +57,11 @@ struct VideoControls: View {
                 Spacer()
             }
             
-            Button(action: {
-                if !cameraManager.isRecording {
-                    cameraManager.startRecording();
-                } else {
-                    cameraManager.stopRecording();
-                }
-            }) {
-                Image(systemName: cameraManager.isRecording  ? "stop.circle.fill" : "record.circle")
-                    .font(.system(size: 60))
-                    .foregroundColor(cameraManager.isRecording ? .red : .white)
-            }
-
+            RecordButton(cameraManager: cameraManager)
+            
             HStack {
                 Spacer()
                 FlipCameraButton(cameraManager: cameraManager)
-                    .padding(.trailing)
-                    .padding(.top)
             }
         }.padding(.all).padding(.bottom, 40)
     }
