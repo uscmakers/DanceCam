@@ -7,10 +7,12 @@
 
 import MediaPipeTasksVision
 import SwiftUI
+import AVFoundation
 
 struct PoseVisualization: View {
     let poses: [[NormalizedLandmark]]
     let size: CGSize
+    let currentPosition: AVCaptureDevice.Position
     
     var body: some View {
         Canvas { context, size in
@@ -20,7 +22,10 @@ struct PoseVisualization: View {
             var maxY: Int = 0
             for pose in poses {
                 for landmark in pose {
-                    let pX: Int = Int(landmark.y * Float(size.width))
+                    var pX: Int = Int(landmark.y * Float(size.width))
+                    if (currentPosition == .back) {
+                        pX = Int(size.width) - pX
+                    }
                     let pY: Int = Int(landmark.x * Float(size.height))
                     minX = min(minX, pX)
                     maxX = max(maxX, pX)

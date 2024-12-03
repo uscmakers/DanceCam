@@ -26,11 +26,7 @@ struct CameraPreview: UIViewRepresentable {
 
 // MARK: - Main View
 struct VideoFeed: View {
-    @StateObject private var cameraManager: CameraManager
-    
-    init(captureSession: AVCaptureSession) {
-        _cameraManager = StateObject(wrappedValue: CameraManager())
-    }
+    @StateObject private var cameraManager = CameraManager()
     
     var body: some View {
         ZStack {
@@ -39,11 +35,11 @@ struct VideoFeed: View {
             
             PoseVisualization(
                 poses: cameraManager.poses,
-                size: UIScreen.main.bounds.size
+                size: UIScreen.main.bounds.size,
+                currentPosition: cameraManager.currentPosition
             )
         }.overlay(
-            VideoControls(cameraManager: cameraManager),
-            alignment: .bottom
+            ControlsOverlay(cameraManager: cameraManager)
         )
     }
 }

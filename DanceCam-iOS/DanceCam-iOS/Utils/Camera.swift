@@ -258,7 +258,7 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 let cW: Float = frameWidth/2
                 let cH: Float = frameHeight/2
                 
-                let dX: Float = cX - cW
+                // let dX: Float = cX - cW
                 let dY: Float = cY - cH
                 
                 let maxDuty: Float = 4096
