@@ -9,6 +9,8 @@ import SwiftUI
 import PhotosUI
 
 struct GalleryButton: View {
+    var disabled: Bool
+    
     var body: some View {
         Button(action: {
             if let url = URL(string: "photos-redirect://") {
@@ -23,28 +25,20 @@ struct GalleryButton: View {
                 .padding()
                 .background(Circle().fill(Color.black.opacity(0.6)))
         }
+        .disabled(disabled).opacity(disabled ? 0.5 : 1)
     }
 }
 
 struct RecordButton: View {
-    var cameraManager: CameraManager?
+    @StateObject var cameraManager: CameraManager
     
     var isRecording: Bool {
-        guard let cameraManager
-        else {
-            return false
-        }
-
         return cameraManager.isRecording
     }
     
     var body: some View {
         Button(action: {
-            guard let cameraManager
-            else {
-                return
-            }
-            
+    
             if !cameraManager.isRecording {
                 cameraManager.startRecording();
             } else {
@@ -59,33 +53,16 @@ struct RecordButton: View {
 }
 
 struct FlipCameraButton: View {
-    var cameraManager: CameraManager?
+    @StateObject var cameraManager: CameraManager
+    var disabled: Bool
     
-    var disabled: Bool {
-        guard let cameraManager
-        else {
-            return false
-        }
-        
-        return cameraManager.isRecording || cameraManager.isFlipping
-    }
     var isFlipping: Bool {
-        guard let cameraManager
-        else {
-            return false
-        }
-        
         return cameraManager.isFlipping
     }
     
     var body: some View {
         Button(action: {
             withAnimation {
-                guard let cameraManager
-                else {
-                    return
-                }
-                
                 cameraManager.flipCamera()
             }
         }) {
@@ -101,25 +78,22 @@ struct FlipCameraButton: View {
 }
 
 struct BottomControls: View {
-    var cameraManager: CameraManager?
+    @StateObject var cameraManager: CameraManager
+    var disabled: Bool {
+        return cameraManager.isRecording || cameraManager.isFlipping
+    }
     
     var body: some View {
         ZStack {
             HStack {
-                GalleryButton()
+                GalleryButton(disabled: disabled)
+                    .padding(.leading, 30)
                 Spacer()
+                FlipCameraButton(cameraManager: cameraManager, disabled: disabled)
+                    .padding(.trailing, 30)
             }
             
             RecordButton(cameraManager: cameraManager)
-            
-            HStack {
-                Spacer()
-                FlipCameraButton(cameraManager: cameraManager)
-            }
-        }.background().padding(.all).padding(.bottom, 40)
+        }
     }
-}
-
-#Preview {
-    BottomControls()
 }

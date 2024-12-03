@@ -382,6 +382,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DanceCam-iOS/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Dance Cam";
 				INFOPLIST_KEY_NSCameraUsageDescription = "DanceCam-iOS requires access to your phone's camera";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "DanceCam-iOS requires access to your phone's photo library";
@@ -417,6 +418,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DanceCam-iOS/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Dance Cam";
 				INFOPLIST_KEY_NSCameraUsageDescription = "DanceCam-iOS requires access to your phone's camera";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "DanceCam-iOS requires access to your phone's photo library";

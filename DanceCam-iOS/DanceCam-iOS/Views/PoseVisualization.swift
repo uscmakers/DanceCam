@@ -13,9 +13,14 @@ struct PoseVisualization: View {
     let poses: [[NormalizedLandmark]]
     let size: CGSize
     let currentPosition: AVCaptureDevice.Position
+    let shouldDisplay: Bool
     
     var body: some View {
         Canvas { context, size in
+            if !shouldDisplay {
+                return
+            }
+            
             var minX: Int = Int(size.width)
             var maxX: Int = 0
             var minY: Int = Int(size.height)

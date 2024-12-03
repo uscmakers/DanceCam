@@ -36,7 +36,8 @@ struct VideoFeed: View {
             PoseVisualization(
                 poses: cameraManager.poses,
                 size: UIScreen.main.bounds.size,
-                currentPosition: cameraManager.currentPosition
+                currentPosition: cameraManager.currentPosition,
+                shouldDisplay: cameraManager.isDisplayingViz
             )
         }.overlay(
             ControlsOverlay(cameraManager: cameraManager)

@@ -27,7 +27,20 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
     @Published var lastError: String?
     @Published var poses: [[NormalizedLandmark]] = []
     
+    @Published var isSendingToRPi: Bool {
+        didSet {
+            UserDefaults.standard.set(isSendingToRPi, forKey: "isSendingToRPi")
+        }
+    }
+    @Published var isDisplayingViz: Bool {
+        didSet {
+            UserDefaults.standard.set(isDisplayingViz, forKey: "isDisplayingViz")
+        }
+    }
+    
     override init() {
+        self.isSendingToRPi = UserDefaults.standard.bool(forKey: "isSendingToRPi")
+        self.isDisplayingViz = UserDefaults.standard.bool(forKey: "isDisplayingViz")
         super.init()
         
         // Initialize PoseLandmarker with default settings
@@ -200,6 +213,15 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
         }
     }
     
+    func startRPiConnection() {
+        isSendingToRPi = true
+    }
+    
+    func stopRPiConnection() {
+        isSendingToRPi = false
+        sendStop()
+    }
+    
     private func saveVideoToPhotoLibrary(videoURL: URL) {
         PHPhotoLibrary.shared().performChanges({
             PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoURL)
@@ -235,6 +257,10 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
         DispatchQueue.main.async { [weak self] in
             self?.poses = newLandmarks
             
+            guard var isSendingToRPi = self?.isSendingToRPi else {
+                return
+            }
+            
             if(self?.poses.count ?? 0 > 0) {
                 guard let pose = self?.poses[0] else {
                     print("Failed to unwrap pose")
@@ -266,12 +292,11 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 let sigmoid: Float = 1/(1+exp(-dY/frameHeight/2*scalingFactor))
                 var dutyY: Int = Int(maxDuty*2*sigmoid-maxDuty)
                 // let dutyY: Int = Int(dY/frameHeight/2*maxDuty)
-                print(dutyY)
-                if RUN_MOTOR { sendMove(duty1:dutyY,duty2:dutyY,duty3:dutyY,duty4:dutyY) }
+                if isSendingToRPi { sendMove(duty1:dutyY,duty2:dutyY,duty3:dutyY,duty4:dutyY) }
                 
             } else {
                 // Stop moving if no bodies detected
-                if RUN_MOTOR { sendStop() }
+                if isSendingToRPi { sendStop() }
             }
             
         }

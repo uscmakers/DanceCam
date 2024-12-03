@@ -8,15 +8,23 @@
 import SwiftUI
 
 struct ControlsOverlay: View {
-    var cameraManager: CameraManager
+    @StateObject var cameraManager: CameraManager
     
     var body: some View {
-        VStack {
-            BottomControls(cameraManager: cameraManager)
-            
-            Spacer()
-            
-            TopControls(cameraManager: cameraManager)
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                TopControls(cameraManager: cameraManager)
+                    .frame(height: 160).offset(y: cameraManager.isRecording ? -200 : 0)
+                    .animation(.default, value: cameraManager.isRecording)
+                
+                Spacer()
+                
+                BottomControls(cameraManager: cameraManager)
+                    .frame(height: 100)
+                    .background(.ultraThinMaterial)
+                    .padding(.bottom, 20)
+            }
+            .edgesIgnoringSafeArea(.all)
         }
     }
 }
