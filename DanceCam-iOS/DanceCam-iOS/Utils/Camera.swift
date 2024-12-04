@@ -290,8 +290,7 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 let maxDuty: Float = 4096
                 let scalingFactor: Float = 5
                 let sigmoid: Float = 1/(1+exp(-dY/frameHeight/2*scalingFactor))
-                var dutyY: Int = Int(maxDuty*2*sigmoid-maxDuty)
-                // let dutyY: Int = Int(dY/frameHeight/2*maxDuty)
+                let dutyY: Int = Int(maxDuty*2*sigmoid-maxDuty)
                 if isSendingToRPi { sendMove(duty1:dutyY,duty2:dutyY,duty3:dutyY,duty4:dutyY) }
                 
             } else {
