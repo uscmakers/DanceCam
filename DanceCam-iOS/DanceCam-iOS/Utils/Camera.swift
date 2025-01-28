@@ -287,6 +287,11 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 // let dX: Float = cX - cW
                 let dY: Float = cY - cH
                 
+                // Stop moving if "negligible" movement
+                if dY < frameHeight/10 {
+                    if isSendingToRPi { sendStop() }
+                }
+                
                 let maxDuty: Float = 4096
                 let scalingFactor: Float = 5
                 let sigmoid: Float = 1/(1+exp(-dY/frameHeight/2*scalingFactor))
