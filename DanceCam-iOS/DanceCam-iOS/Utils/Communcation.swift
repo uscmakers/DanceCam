@@ -8,7 +8,7 @@
 import Foundation
 
 func sendMove(duty1: Int, duty2: Int, duty3: Int, duty4: Int) {
-    guard let url = URL(string: "http://172.20.10.3:8000/move") else { return }
+    guard let url = URL(string: "http://172.20.10.2:8000/move") else { return }
     
     // Create a URLRequest object
     var request = URLRequest(url: url)
@@ -55,7 +55,7 @@ func sendMove(duty1: Int, duty2: Int, duty3: Int, duty4: Int) {
 }
 
 func sendStop() {
-    guard let url = URL(string: "http://172.20.10.3:8000/stop") else { return }
+    guard let url = URL(string: "http://172.20.10.2:8000/stop") else { return }
     
     // Create a URLRequest object
     var request = URLRequest(url: url)
