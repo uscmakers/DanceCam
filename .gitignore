@@ -7,3 +7,5 @@ xcuserdata
 
 # sst
 .sst
+
+*.env
