@@ -287,16 +287,24 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 // let dX: Float = cX - cW
                 let dY: Float = cY - cH
                 
-                // Stop moving if "negligible" movement
-                if dY < frameHeight/10 {
-                    if isSendingToRPi { sendStop() }
-                }
-                
                 let maxDuty: Float = 4096
-                let scalingFactor: Float = 5
-                let sigmoid: Float = 1/(1+exp(-dY/frameHeight/2*scalingFactor))
-                let dutyY: Int = Int(maxDuty*2*sigmoid-maxDuty)
-                if isSendingToRPi { sendMove(duty1:dutyY,duty2:dutyY,duty3:dutyY,duty4:dutyY) }
+                let scalingFactor: Float = 10
+                var sigmoid: Float = 0
+                let deadFactor: Float = 0.075
+                let deltaDead: Float = deadFactor*frameHeight
+                if (dY < -1 * deltaDead){
+                    sigmoid = 1/(1+exp(-(dY+deltaDead)/frameHeight/2*scalingFactor))
+                }
+                else if (dY > deltaDead){
+                    sigmoid = 1/(1+exp(-(dY-deltaDead)/frameHeight/2*scalingFactor))
+                }
+                if sigmoid == 0 {
+                    // Stop moving if "negligible" movement
+                    if isSendingToRPi { sendStop() }
+                } else {
+                    let dutyY: Int = Int(maxDuty*2*sigmoid-maxDuty)
+                    if isSendingToRPi { sendMove(duty1:dutyY,duty2:dutyY,duty3:dutyY,duty4:dutyY) }
+                }
                 
             } else {
                 // Stop moving if no bodies detected
