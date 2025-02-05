@@ -25,31 +25,40 @@ struct PoseVisualization: View {
             var maxX: Int = 0
             var minY: Int = Int(size.height)
             var maxY: Int = 0
-            for pose in poses {
-                for landmark in pose {
-                    var pX: Int = Int(landmark.y * Float(size.width))
+            
+            var idx = 0
+            
+            for points in poses {
+                for point in points {
+                    var pX: Int = Int(point.y * Float(size.width))
+                    let pY: Int = Int(point.x * Float(size.height))
+                    
                     if (currentPosition == .back) {
                         pX = Int(size.width) - pX
                     }
-                    let pY: Int = Int(landmark.x * Float(size.height))
+                    
                     minX = min(minX, pX)
                     maxX = max(maxX, pX)
                     minY = min(minY, pY)
                     maxY = max(maxY, pY)
+                    
                     let pSize = 10
                     let pRect = CGRect(origin: CGPoint(x: pX, y: pY), size: CGSize(width: pSize, height: pSize))
-                    if(DRAW_LANDMARKS) { context.fill(Circle().path(in: pRect), with: .color(.blue)) }
+                    if(DRAW_LANDMARKS) { // Draws points
+                        context.fill(Circle().path(in: pRect), with: .color(.blue))
+                    }
+                    
                 }
-            }
-            if(poses.count > 0) {
+                idx += 1
+                print(idx)
+                
+                // Draws bounding box
                 let bbox = CGRect(origin: CGPoint(x: minX, y: minY), size: CGSize(width: maxX-minX, height: maxY-minY))
-                if(DRAW_BBOX) { context.stroke(Path(bbox), with: .color(.orange), lineWidth: 5) }
+                if(DRAW_BBOX){
+                    context.stroke(Path(bbox), with: .color(.orange), lineWidth: 5)
+                }
             }
         }
         .frame(width: size.width, height: size.height)
     }
-}
-
-#Preview {
-    
 }
