@@ -48,7 +48,7 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
         options.baseOptions.modelAssetPath = Bundle.main.path(forResource: MODEL, ofType: MODEL_EXT)!
         options.runningMode = .liveStream
         options.poseLandmarkerLiveStreamDelegate = self
-        options.numPoses = 1 // Maximum number of poses detected by the pose landmarker (i.e., total number of dancers)
+        options.numPoses = 4 // Maximum number of poses detected by the pose landmarker (i.e., total number of dancers)
 
         do {
             poseLandmarker = try PoseLandmarker(options: options)
@@ -266,17 +266,21 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                     print("Failed to unwrap pose")
                     return
                 }
-                var xValues: [Float] = []
-                var yValues: [Float] = []
                 
-                for landmark in pose {
-                    xValues.append(landmark.x)
-                    yValues.append(landmark.y)
+                var xMin: Float = 0.0
+                var xMax: Float = 0.0
+                var yMin: Float = 0.0
+                var yMax: Float = 0.0
+                
+                for dancer in self!.poses {
+                    for xy in dancer {
+                        // Update min and max values
+                        xMin = min(xMin, xy.x)
+                        xMax = max(xMax, xy.x)
+                        yMin = min(yMin, xy.y)
+                        yMax = max(yMax, xy.y)
+                    }
                 }
-                let xMin: Float = xValues.min()!
-                let xMax: Float = xValues.max()!
-                let yMin: Float = yValues.min()!
-                let yMax: Float = yValues.max()!
                 
                 let cX: Float = ((xMin + xMax)/2)*frameWidth
                 let cY: Float = ((yMin + yMax)/2)*frameHeight
