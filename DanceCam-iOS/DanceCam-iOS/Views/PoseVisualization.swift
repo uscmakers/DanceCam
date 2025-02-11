@@ -49,6 +49,7 @@ struct PoseVisualization: View {
                     }
                     
                 }
+                
                 idx += 1
                 print(idx)
                 
@@ -57,6 +58,11 @@ struct PoseVisualization: View {
                 if(DRAW_BBOX){
                     context.stroke(Path(bbox), with: .color(.orange), lineWidth: 5)
                 }
+                
+                minX = Int(size.width)
+                maxX = 0
+                minY = Int(size.height)
+                maxY = 0
             }
         }
         .frame(width: size.width, height: size.height)

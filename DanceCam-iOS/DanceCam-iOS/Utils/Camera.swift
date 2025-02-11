@@ -49,6 +49,7 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
         options.runningMode = .liveStream
         options.poseLandmarkerLiveStreamDelegate = self
         options.numPoses = 4 // Maximum number of poses detected by the pose landmarker (i.e., total number of dancers)
+        options.minTrackingConfidence = 0.7
 
         do {
             poseLandmarker = try PoseLandmarker(options: options)
