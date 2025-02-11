@@ -25,14 +25,9 @@ struct PoseVisualization: View {
             var maxX: Int = 0
             var minY: Int = Int(size.height)
             var maxY: Int = 0
-            
-            var idx = 0
-            
-            for points in poses {
-                for point in points {
-                    var pX: Int = Int(point.y * Float(size.width))
-                    let pY: Int = Int(point.x * Float(size.height))
-                    
+            for pose in poses {
+                for landmark in [pose[12], pose[11], pose[24], pose[23]] {
+                    var pX: Int = Int(landmark.y * Float(size.width))
                     if (currentPosition == .back) {
                         pX = Int(size.width) - pX
                     }

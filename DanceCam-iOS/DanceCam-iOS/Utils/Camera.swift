@@ -266,24 +266,33 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                     print("Failed to unwrap pose")
                     return
                 }
+//                var xValues: [Float] = []
+//                var yValues: [Float] = []
+//                
+//                for landmark in pose {
+//                    xValues.append(landmark.x)
+//                    yValues.append(landmark.y)
+//                }
                 
-                var xMin: Float = 0.0
-                var xMax: Float = 0.0
-                var yMin: Float = 0.0
-                var yMax: Float = 0.0
+                let torsoX: [Float] = [pose[12].x, pose[11].x, pose[24].x, pose[23].x]
+                let torsoY: [Float] = [pose[12].y, pose[11].y, pose[24].y, pose[23].y]
                 
-                for dancer in self!.poses {
-                    for xy in dancer {
-                        // Update min and max values
-                        xMin = min(xMin, xy.x)
-                        xMax = max(xMax, xy.x)
-                        yMin = min(yMin, xy.y)
-                        yMax = max(yMax, xy.y)
-                    }
+//                let xMin: Float = xValues.min()!
+//                let xMax: Float = xValues.max()!
+//                let yMin: Float = yValues.min()!
+//                let yMax: Float = yValues.max()!
+                var sumX: Float = 0
+                var sumY: Float = 0
+                
+                for xPoint in torsoX{
+                    sumX += xPoint
+                }
+                for yPoint in torsoY{
+                    sumY += yPoint
                 }
                 
-                let cX: Float = ((xMin + xMax)/2)*frameWidth
-                let cY: Float = ((yMin + yMax)/2)*frameHeight
+                let cX: Float = (sumX/Float(torsoX.count))*frameWidth
+                let cY: Float = (sumY/Float(torsoY.count))*frameHeight
                 
                 let cW: Float = frameWidth/2
                 let cH: Float = frameHeight/2
