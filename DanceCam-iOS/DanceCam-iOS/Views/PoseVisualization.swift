@@ -25,9 +25,14 @@ struct PoseVisualization: View {
             var maxX: Int = 0
             var minY: Int = Int(size.height)
             var maxY: Int = 0
-            for pose in poses {
-                for landmark in [pose[12], pose[11], pose[24], pose[23]] {
-                    var pX: Int = Int(landmark.y * Float(size.width))
+            
+            var idx = 0
+            
+            for points in poses {
+                for point in [points[12], points[11], points[23], points[24]] {
+                    var pX: Int = Int(point.y * Float(size.width))
+                    let pY: Int = Int(point.x * Float(size.height))
+                    
                     if (currentPosition == .back) {
                         pX = Int(size.width) - pX
                     }
@@ -44,14 +49,16 @@ struct PoseVisualization: View {
                     }
                     
                 }
-                idx += 1
-                print(idx)
-                
                 // Draws bounding box
                 let bbox = CGRect(origin: CGPoint(x: minX, y: minY), size: CGSize(width: maxX-minX, height: maxY-minY))
                 if(DRAW_BBOX){
                     context.stroke(Path(bbox), with: .color(.orange), lineWidth: 5)
                 }
+                
+                minX = Int(size.width)
+                maxX = 0
+                minY = Int(size.height)
+                maxY = 0
             }
         }
         .frame(width: size.width, height: size.height)
