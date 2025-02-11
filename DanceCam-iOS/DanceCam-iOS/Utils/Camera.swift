@@ -297,10 +297,10 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 let deadFactor: Float = 0.075
                 let deltaDead: Float = deadFactor*frameHeight
                 if (dY < -1 * deltaDead){
-                    sigmoid = 1/(1+exp(-(dY+deltaDead)/frameHeight/2*scalingFactor))
+                    sigmoid = 1/(1+exp(-(dY+deltaDead)/frameHeight/2*scalingFactor))-0.02
                 }
                 else if (dY > deltaDead){
-                    sigmoid = 1/(1+exp(-(dY-deltaDead)/frameHeight/2*scalingFactor))
+                    sigmoid = 1/(1+exp(-(dY-deltaDead)/frameHeight/2*scalingFactor))+0.02
                 }
                 if sigmoid == 0 {
                     // Stop moving if "negligible" movement
