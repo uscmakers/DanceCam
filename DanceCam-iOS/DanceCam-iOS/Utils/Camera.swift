@@ -291,26 +291,45 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 
                 // let dX: Float = cX - cW
                 let dY: Float = cY - cH
-                
+                let dX: Float = cX - cW
+
                 let maxDuty: Float = 4096
                 let scalingFactor: Float = 10
-                var sigmoid: Float = 0
-                let deadFactor: Float = 0.075
-                let deltaDead: Float = deadFactor*frameHeight
-                if (dY < -1 * deltaDead){
-                    sigmoid = 1/(1+exp(-(dY+deltaDead)/frameHeight/2*scalingFactor))-0.02
+                var sigmoidY: Float = 0
+                var sigmoidX: Float = 0
+                let deadFactorY: Float = 0.075
+                let deadFactorX: Float = 0.075
+                let deltaDeadY: Float = deadFactorY*frameHeight
+                let deltaDeadX: Float = deadFactorX*frameWidth
+                if (dY < -1 * deltaDeadY){
+                    sigmoidY = 1/(1+exp(-(dY+deltaDeadY)/frameHeight/2*scalingFactor))-0.02
                 }
-                else if (dY > deltaDead){
-                    sigmoid = 1/(1+exp(-(dY-deltaDead)/frameHeight/2*scalingFactor))+0.02
+                else if (dY > deltaDeadY){
+                    sigmoidY = 1/(1+exp(-(dY-deltaDeadY)/frameHeight/2*scalingFactor))+0.02
                 }
-                if sigmoid == 0 {
+                if sigmoidY == 0 {
                     // Stop moving if "negligible" movement
                     if isSendingToRPi { sendStop() }
                 } else {
-                    let dutyY: Int = Int(maxDuty*2*sigmoid-maxDuty)
+                    let dutyY: Int = Int(maxDuty*2*sigmoidY-maxDuty)
                     if isSendingToRPi { sendMove(duty1:dutyY,duty2:dutyY,duty3:dutyY,duty4:dutyY) }
                 }
                 
+                //Calculate for back and forth movement. TODO NOT CORRECT!
+                if (dX < -1 * deltaDeadX){
+                    sigmoidX = 1/(1+exp(-(dX+deltaDeadX)/frameWidth/2*scalingFactor))-0.02
+                }
+                else if (dX > deltaDeadX){
+                    sigmoidX = 1/(1+exp(-(dX+deltaDeadX)/frameWidth/2*scalingFactor))-0.02
+                }
+                if sigmoidX == 0{
+                    if isSendingToRPi { sendStop() }
+                } else{
+                    let dutyX: Int = Int(maxDuty*2*sigmoidX-maxDuty)
+                    //Might need to move the -1 to the duty2 and duty3, or leave for duty1 and duty4, depends on orientation of robot
+                    if isSendingToRPi { sendMove(duty1:-1 * dutyX,duty2:dutyX ,duty3:dutyX ,duty4:-1 * dutyX) }
+                }
+
             } else {
                 // Stop moving if no bodies detected
                 if isSendingToRPi { sendStop() }
