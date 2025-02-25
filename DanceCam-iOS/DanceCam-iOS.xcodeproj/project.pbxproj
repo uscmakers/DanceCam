@@ -378,11 +378,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DanceCam-iOS/Preview Content\"";
-<<<<<<< HEAD
-				DEVELOPMENT_TEAM = 79XZXQ68F6;
-=======
 				DEVELOPMENT_TEAM = 6VA6DMB345;
->>>>>>> 8517665 (single box)
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DanceCam-iOS/Info.plist";
@@ -399,11 +395,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-<<<<<<< HEAD
-				PRODUCT_BUNDLE_IDENTIFIER = dancecom.dancecam.DanceCam2;
-=======
 				PRODUCT_BUNDLE_IDENTIFIER = dancecam;
->>>>>>> 8517665 (single box)
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -422,11 +414,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DanceCam-iOS/Preview Content\"";
-<<<<<<< HEAD
 				DEVELOPMENT_TEAM = 79XZXQ68F6;
-=======
-				DEVELOPMENT_TEAM = 6VA6DMB345;
->>>>>>> 8517665 (single box)
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DanceCam-iOS/Info.plist";
