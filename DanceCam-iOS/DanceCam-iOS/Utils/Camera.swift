@@ -301,6 +301,7 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 let deadFactorX: Float = 0.075
                 let deltaDeadY: Float = deadFactorY*frameHeight
                 let deltaDeadX: Float = deadFactorX*frameWidth
+                let offsetX: Float = 0.2
                 if (dY < -1 * deltaDeadY){
                     sigmoidY = 1/(1+exp(-(dY+deltaDeadY)/frameHeight/2*scalingFactor))-0.02
                 }
@@ -316,11 +317,11 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 }
                 
                 //Calculate for back and forth movement. TODO NOT CORRECT!
-                if (dX < -1 * deltaDeadX){
-                    sigmoidX = 1/(1+exp(-(dX+deltaDeadX)/frameWidth/2*scalingFactor))-0.02
+                if ((xMin-offsetX) < -1 * deltaDeadX){
+                    sigmoidX = 1/(1+exp(-((xMin-offsetX)+deltaDeadX)/frameWidth/2*scalingFactor))-0.02
                 }
-                else if (dX > deltaDeadX){
-                    sigmoidX = 1/(1+exp(-(dX+deltaDeadX)/frameWidth/2*scalingFactor))-0.02
+                else if ((xMin-offsetX) > deltaDeadX){
+                    sigmoidX = 1/(1+exp(-((xMin-offsetX)+deltaDeadX)/frameWidth/2*scalingFactor))-0.02
                 }
                 if sigmoidX == 0{
                     if isSendingToRPi { sendStop() }
