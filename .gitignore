@@ -2,3 +2,10 @@
 Pods/
 
 xcuserdata
+
+*.mp4
+
+# sst
+.sst
+
+*.env
