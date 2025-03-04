@@ -268,20 +268,24 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                     return
                 }
                 
-                var xMin: Float = 0.0
-                var xMax: Float = 0.0
-                var yMin: Float = 0.0
-                var yMax: Float = 0.0
+                // Initialize empty x and y arrays
+                var xValues: [Float] = []
+                var yValues: [Float] = []
                 
+                // Go thru each dancer and xy's of each dancer
                 for dancer in self!.poses {
                     for xy in dancer {
-                        // Update min and max values
-                        xMin = min(xMin, xy.x)
-                        xMax = max(xMax, xy.x)
-                        yMin = min(yMin, xy.y)
-                        yMax = max(yMax, xy.y)
+                        // Add x- and y-values to array
+                        xValues.append(xy.x)
+                        yValues.append(xy.y)
                     }
                 }
+                
+                // Solve for mins/maxes if not nil
+                var xMin: Float = xValues.min()!
+                var xMax: Float = xValues.max()!
+                var yMin: Float = yValues.min()!
+                var yMax: Float = yValues.max()!
                 
                 let cX: Float = ((xMin + xMax)/2)*frameWidth
                 let cY: Float = ((yMin + yMax)/2)*frameHeight
@@ -292,7 +296,6 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 // let dX: Float = cX - cW
                 let dY: Float = cY - cH
 
-                
                 let maxDuty: Float = 4096
                 let scalingFactor: Float = 10
                 var sigmoid: Float = 0
