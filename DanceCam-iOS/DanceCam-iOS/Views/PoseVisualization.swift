@@ -25,13 +25,11 @@ struct PoseVisualization: View {
             var maxX: Int = 0
             var minY: Int = Int(size.height)
             var maxY: Int = 0
-            
-//            var idx = 0
-            
-            for points in poses {
-                for point in points {
-                    var pX: Int = Int(point.y * Float(size.width))
-                    let pY: Int = Int(point.x * Float(size.height))
+                        
+            for dancer in poses {
+                for xy in dancer {
+                    var pX: Int = Int(xy.y * Float(size.width))
+                    let pY: Int = Int(xy.x * Float(size.height))
                     
                     if (currentPosition == .back) {
                         pX = Int(size.width) - pX
@@ -50,8 +48,6 @@ struct PoseVisualization: View {
                     
                 }
                 
-//                idx += 1
-//                print(idx)
             }
             
             // Draws single bounding box over all dancers
@@ -59,12 +55,6 @@ struct PoseVisualization: View {
             if(DRAW_BBOX){
                 context.stroke(Path(bbox), with: .color(.orange), lineWidth: 5)
             }
-            
-            // Reinitialize min and max to default values
-            minX = Int(size.width)
-            maxX = 0
-            minY = Int(size.height)
-            maxY = 0
         }
         .frame(width: size.width, height: size.height)
     }
