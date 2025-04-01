@@ -26,6 +26,8 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
     @Published var currentPosition: AVCaptureDevice.Position = .front
     @Published var lastError: String?
     @Published var poses: [[NormalizedLandmark]] = []
+    @Published var options = PoseLandmarkerOptions()
+    @Published var timeRemaining: Int = 5
     
     @Published var isSendingToRPi: Bool {
         didSet {
@@ -38,17 +40,23 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
         }
     }
     
+    // Maximum number of poses detected by the pose landmarker (total number of dancers)
+    @Published var numPoses: Int = 1 { // Default to 1
+        didSet {
+            options.numPoses = numPoses
+            updatePoseLandmarker()
+        }
+    }
+    
     override init() {
         self.isSendingToRPi = UserDefaults.standard.bool(forKey: "isSendingToRPi")
         self.isDisplayingViz = UserDefaults.standard.bool(forKey: "isDisplayingViz")
         super.init()
         
         // Initialize PoseLandmarker with default settings
-        let options = PoseLandmarkerOptions()
         options.baseOptions.modelAssetPath = Bundle.main.path(forResource: MODEL, ofType: MODEL_EXT)!
         options.runningMode = .liveStream
         options.poseLandmarkerLiveStreamDelegate = self
-        options.numPoses = 4 // Maximum number of poses detected by the pose landmarker (i.e., total number of dancers)
         options.minTrackingConfidence = 0.7
 
         do {
@@ -56,6 +64,7 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
         } catch {
            fatalError("Failed to initialize pose landmarker: \(error)")
        }
+        
         
         setupCamera()
         checkPhotoLibraryPermission()
@@ -151,6 +160,15 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
         }
     }
     
+    private func updatePoseLandmarker() {
+        do {
+            options.numPoses = numPoses
+            poseLandmarker = try PoseLandmarker(options: options)
+        } catch {
+            print("Failed to update pose landmarker: \(error)")
+        }
+    }
+    
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let image = try? MPImage(sampleBuffer: sampleBuffer) else { return }
         frameWidth = Float(image.width)
@@ -171,6 +189,7 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
         let videoURL = documentsPath.appendingPathComponent(videoName)
         
         // Start recording
+        // if button click, then start timer and start recording
         movieFileOutput.startRecording(to: videoURL, recordingDelegate: self)
         isRecording = true
     }

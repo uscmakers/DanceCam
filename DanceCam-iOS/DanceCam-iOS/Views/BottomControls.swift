@@ -30,7 +30,12 @@ struct GalleryButton: View {
 }
 
 struct RecordButton: View {
-    @StateObject var cameraManager: CameraManager
+    @ObservedObject var cameraManager: CameraManager
+    
+    // Timer Variable
+    @State private var timer: Timer?
+    @State private var timeRemaining = 0
+    @State private var timerIsActive = false
     
     var isRecording: Bool {
         return cameraManager.isRecording
@@ -38,16 +43,40 @@ struct RecordButton: View {
     
     var body: some View {
         Button(action: {
-    
             if !cameraManager.isRecording {
-                cameraManager.startRecording();
+                timerIsActive = true
+                startTimer()
             } else {
-                cameraManager.stopRecording();
+                cameraManager.stopRecording()
             }
         }) {
-            Image(systemName: isRecording  ? "stop.circle.fill" : "record.circle")
-                .font(.system(size: 60))
-                .foregroundColor(isRecording ? .red : .white)
+            if timerIsActive {
+                Image(systemName: "\(timeRemaining).circle.fill")
+                    .font(.system(size: 60))
+                    .foregroundColor(.white)
+            }
+            else {
+                Image(systemName: isRecording ? "stop.circle.fill" : "record.circle")
+                    .font(.system(size: 60))
+                    .foregroundColor(isRecording ? .red : .white)
+            }
+        }
+    }
+    
+    // Function to start timer
+    private func startTimer() {
+        self.timeRemaining = cameraManager.timeRemaining
+        self.timer?.invalidate() // Invalidate any existing timer
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { t in
+            if self.timeRemaining > 1 {
+                self.timeRemaining -= 1
+            } else {
+                t.invalidate()
+                cameraManager.startRecording()  // Start the camera recording
+                cameraManager.isRecording = true
+                self.timerIsActive = false
+            }
         }
     }
 }

@@ -27,6 +27,7 @@ struct CameraPreview: UIViewRepresentable {
 // MARK: - Main View
 struct VideoFeed: View {
     @StateObject private var cameraManager = CameraManager()
+    @State private var numDancers = 1
     
     var body: some View {
         ZStack {

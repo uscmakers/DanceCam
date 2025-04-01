@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ControlsOverlay: View {
-    @StateObject var cameraManager: CameraManager
+    @ObservedObject var cameraManager: CameraManager
     
     var body: some View {
         GeometryReader { geometry in
