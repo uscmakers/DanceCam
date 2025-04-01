@@ -4,18 +4,25 @@ from gpiozero import Motor, PWMOutputDevice
 
 class Vehicle:
     def __init__(self):
-        self.left_motor = Motor(forward=17, backward=22)
-        self.left_pwm = PWMOutputDevice(18)
+        self.left_motor = Motor(forward=7, backward=8)
+        self.left_pwm = PWMOutputDevice(12)
         self.left_pwm.value = 0
 
+        self.right_motor = Motor(forward=6, backward=5)
+        self.right_pwm = PWMOutputDevice(13)
+        self.right_pwm.value = 0
     def forward(self):
         self.left_motor.forward()
-        self.left_pwm.value = 0.5
+        self.left_pwm.value = 1
 
+        self.right_motor.forward()
+        self.right_pwm.value = 1
     def backward(self):
         self.left_motor.backward()
-        self.left_pwm.value = 0.5
+        self.left_pwm.value = 1
 
+        self.right_motor.backward()
+        self.right_pwm.value = 1
     def map_key_to_command(self, key):
         map = {
             curses.KEY_UP: self.forward,
@@ -52,6 +59,6 @@ def main(window):
                 next_key = window.getch()
             # KEY RELEASED
             rpi_vehicle.left_motor.stop()
-
+            rpi_vehicle.right_motor.stop()
 
 curses.wrapper(main)
