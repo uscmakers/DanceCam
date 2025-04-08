@@ -1,112 +1,87 @@
-import curses
-from gpiozero import Motor, PWMOutputDevice
+import RPi.GPIO as GPIO
+import time
 
+# Define motor GPIO pins
+motors = {
+    'back_right': {'fwd': 8, 'bwd': 7, 'pwm': 12},
+    'back_left':  {'fwd': 5, 'bwd': 6, 'pwm': 19},
+    'front_right':{'fwd': 14, 'bwd': 15, 'pwm': 18},
+    'front_left': {'fwd': 3, 'bwd': 2, 'pwm': 13}
+}
 
-class Vehicle:
-    def __init__(self):
-        self.back_right_motor = Motor(forward=7, backward=8)
-        self.back_right_pwm = PWMOutputDevice(12)
-        self.back_right_pwm.value = 0
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 
-        self.back_left_motor = Motor(forward=6, backward=5)
-        self.back_left_pwm = PWMOutputDevice(19)
-        self.back_left_pwm.value = 0
+# Setup pins
+for motor in motors.values():
+    GPIO.setup(motor['fwd'], GPIO.OUT)
+    GPIO.setup(motor['bwd'], GPIO.OUT)
+    GPIO.setup(motor['pwm'], GPIO.OUT)
+    motor['pwm_obj'] = GPIO.PWM(motor['pwm'], 100)
+    motor['pwm_obj'].start(0)
 
-        self.front_right_motor = Motor(forward=14, backward=15)
-        self.front_right_pwm = PWMOutputDevice(18)
-        self.front_right_pwm.value = 0
+def set_motor(motor, direction, speed=100):
+    fwd = motors[motor]['fwd']
+    bwd = motors[motor]['bwd']
+    pwm = motors[motor]['pwm_obj']
+    if direction == 'fwd':
+        GPIO.output(fwd, GPIO.HIGH)
+        GPIO.output(bwd, GPIO.LOW)
+    elif direction == 'bwd':
+        GPIO.output(fwd, GPIO.LOW)
+        GPIO.output(bwd, GPIO.HIGH)
+    else:
+        GPIO.output(fwd, GPIO.LOW)
+        GPIO.output(bwd, GPIO.LOW)
+        speed = 0
+    pwm.ChangeDutyCycle(speed)
 
-        self.front_left_motor = Motor(forward=2, backward=3)
-        self.front_left_pwm = PWMOutputDevice(13)
-        self.front_left_pwm.value = 0
-    def forward(self):
-        self.back_right_motor.forward()
-        self.back_right_pwm.value = 1
+def move_forward():
+    for m in motors: set_motor(m, 'fwd')
 
-        self.back_left_motor.forward()
-        self.back_left_pwm.value = 1
+def move_backward():
+    for m in motors: set_motor(m, 'bwd')
 
-        self.front_right_motor.forward()
-        self.front_right_pwm.value = 1
+def move_left():
+    set_motor('front_left', 'bwd')
+    set_motor('front_right', 'fwd')
+    set_motor('back_left', 'fwd')
+    set_motor('back_right', 'bwd')
 
-        self.front_left_motor.forward()
-        self.front_left_pwm.value = 1
-    def backward(self):
-        self.back_right_motor.backward()
-        self.back_right_pwm.value = 1
+def move_right():
+    set_motor('front_left', 'fwd')
+    set_motor('front_right', 'bwd')
+    set_motor('back_left', 'bwd')
+    set_motor('back_right', 'fwd')
 
-        self.back_left_motor.backward()
-        self.back_left_pwm.value = 1
+def stop():
+    for m in motors: set_motor(m, 'stop')
 
-        self.front_right_motor.backward()
-        self.front_right_pwm.value = 1
-
-        self.front_left_motor.backward()
-        self.front_left_pwm.value = 1
-    def right(self):
-        self.back_right_motor.forward()
-        self.back_right_pwm.value = 1
-
-        self.back_left_motor.backward()
-        self.back_left_pwm.value = 1
-
-        self.front_right_motor.backward()
-        self.front_right_pwm.value = 1
-
-        self.front_left_motor.forward()
-        self.front_left_pwm.value = 1
-    def left(self):
-        self.back_right_motor.backward()
-        self.back_right_pwm.value = 1
-
-        self.back_left_motor.forward()
-        self.back_left_pwm.value = 1
-
-        self.front_right_motor.forward()
-        self.front_right_pwm.value = 1
-
-        self.front_left_motor.backward()
-        self.front_left_pwm.value = 1
-    def map_key_to_command(self, key):
-        map = {
-            curses.KEY_UP: self.forward,
-            curses.KEY_DOWN: self.backward,
-            curses.KEY_RIGHT: self.right,
-            curses.KEY_LEFT: self.left,
-        }
-        return map[key]
-
-    def control(self, key):
-        return self.map_key_to_command(key)
-
-
-rpi_vehicle = Vehicle()
-
-
-def main(window):
-    next_key = None
-
+# Main loop
+try:
     while True:
-        curses.halfdelay(1)
-        if next_key is None:
-            key = window.getch()
-            print(key)
+        print("\nEnter command:")
+        print("[w] forward  [s] backward  [a] left  [d] right  [x] stop  [q] quit")
+        cmd = input("Command: ").lower()
+        if cmd == 'w':
+            move_forward()
+        elif cmd == 's':
+            move_backward()
+        elif cmd == 'a':
+            move_left()
+        elif cmd == 'd':
+            move_right()
+        elif cmd == 'x':
+            stop()
+        elif cmd == 'q':
+            break
         else:
-            key = next_key
-            next_key = None
-        if key != -1:
-            # KEY PRESSED
-            curses.halfdelay(1)
-            action = rpi_vehicle.control(key)
-            if action:
-                action()
-            next_key = key
-            while next_key == key:
-                next_key = window.getch()
-            # KEY RELEASED
-            rpi_vehicle.back_right_motor.stop()
-            rpi_vehicle.back_left_motor.stop()
-            rpi_vehicle.front_right_motor.stop()
-            rpi_vehicle.front_left_motor.stop()
+            stop()
 
-curses.wrapper(main)
+except KeyboardInterrupt:
+    print("Interrupted")
+
+finally:
+    stop()
+    GPIO.cleanup()
+    print("GPIO cleaned up. Exiting.")
