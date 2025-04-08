@@ -12,11 +12,11 @@ class Vehicle:
         self.back_left_pwm = PWMOutputDevice(19)
         self.back_left_pwm.value = 0
 
-        self.front_right_motor = Motor(forward=3, backward=2)
+        self.front_right_motor = Motor(forward=14, backward=15)
         self.front_right_pwm = PWMOutputDevice(18)
         self.front_right_pwm.value = 0
 
-        self.front_left_motor = Motor(forward=14, backward=15)
+        self.front_left_motor = Motor(forward=2, backward=3)
         self.front_left_pwm = PWMOutputDevice(13)
         self.front_left_pwm.value = 0
     def forward(self):
