@@ -53,10 +53,10 @@ def handle_move_request():
     except ValueError:
         return jsonify({"error": "All values must be numbers"}), 400
     motor_speeds = [
-        ('front_right', 'fwd' if duty1 > 0 else 'bwd', duty1),
-        ('front_left', 'fwd' if duty2 > 0 else 'bwd', duty2),
-        ('back_left', 'fwd' if duty3 > 0 else 'bwd', duty3),
-        ('back_right', 'fwd' if duty4 > 0 else 'bwd', duty4),
+        ('front_right', 'fwd' if duty1 > 0 else 'bwd', 100),
+        ('front_left', 'fwd' if duty2 > 0 else 'bwd', 100),
+        ('back_left', 'fwd' if duty3 > 0 else 'bwd', 100),
+        ('back_right', 'fwd' if duty4 > 0 else 'bwd', 100),
     ]
     set_motors(motor_speeds)
     return jsonify({"status": "Successfully triggered motors"})
