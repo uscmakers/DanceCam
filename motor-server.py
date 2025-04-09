@@ -1,93 +1,93 @@
-import RPi.GPIO as GPIO
 from flask import Flask, request, jsonify
+import RPi.GPIO as GPIO
 
-# Initiating a Flask application
 app = Flask(__name__)
 
 # Define motor GPIO pins
 motors = {
+    'back_right': {'fwd': 8, 'bwd': 7, 'pwm': 12},
+    'back_left':  {'fwd': 5, 'bwd': 6, 'pwm': 19},
     'front_right':{'fwd': 14, 'bwd': 15, 'pwm': 18},
-    'front_left':{'fwd': 3, 'bwd': 2, 'pwm': 13},
-    'back_left':{'fwd': 5, 'bwd': 6, 'pwm': 19}, 
-    'back_right':{'fwd': 8, 'bwd': 7, 'pwm': 12},
+    'front_left': {'fwd': 3, 'bwd': 2, 'pwm': 13}
 }
 
-current_motor_speeds = {
-    'front_right':0,
-    'front_left':0,
-    'back_left':0,
-    'back_right':0,
-}
+# Setup GPIO
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 
-def set_motors(motor_speeds):
-    for motor, direction, speed in motor_speeds:
-        if speed != current_motor_speeds[motor]:
-            print(motor, direction, speed)
-            fwd = motors[motor]['fwd']
-            bwd = motors[motor]['bwd']
-            pwm = motors[motor]['pwm_obj']
-            if direction == 'fwd':
-                GPIO.output(fwd, GPIO.HIGH)
-                GPIO.output(bwd, GPIO.LOW)
-            elif direction == 'bwd':
-                GPIO.output(fwd, GPIO.LOW)
-                GPIO.output(bwd, GPIO.HIGH)
-            else:
-                GPIO.output(fwd, GPIO.LOW)
-                GPIO.output(bwd, GPIO.LOW)
-            pwm.ChangeDutyCycle(abs(speed))
-            current_motor_speeds[motor] = speed
+for motor in motors.values():
+    GPIO.setup(motor['fwd'], GPIO.OUT)
+    GPIO.setup(motor['bwd'], GPIO.OUT)
+    GPIO.setup(motor['pwm'], GPIO.OUT)
+    motor['pwm_obj'] = GPIO.PWM(motor['pwm'], 100)
+    motor['pwm_obj'].start(0)
 
-"""
-    Endpoint for sending signal to motors
-"""
+# Control functions
+def set_motor(motor, direction, speed):
+    fwd = motors[motor]['fwd']
+    bwd = motors[motor]['bwd']
+    pwm = motors[motor]['pwm_obj']
+    if direction == 'fwd':
+        GPIO.output(fwd, GPIO.HIGH)
+        GPIO.output(bwd, GPIO.LOW)
+    elif direction == 'bwd':
+        GPIO.output(fwd, GPIO.LOW)
+        GPIO.output(bwd, GPIO.HIGH)
+    else:
+        GPIO.output(fwd, GPIO.LOW)
+        GPIO.output(bwd, GPIO.LOW)
+        speed = 0
+    pwm.ChangeDutyCycle(speed)
 
-@app.route(rule="/move", methods=["POST"])
-def handle_move_request():
+def move_forward(speed):
+    for m in motors: set_motor(m, 'fwd', speed)
+def move_backward(speed):
+    for m in motors: set_motor(m, 'bwd', speed)
+def move_left(speed):
+    set_motor('front_left', 'bwd', speed)
+    set_motor('front_right', 'fwd', speed)
+    set_motor('back_left', 'fwd', speed)
+    set_motor('back_right', 'bwd', speed)
+def move_right(speed):
+    set_motor('front_left', 'fwd', speed)
+    set_motor('front_right', 'bwd', speed)
+    set_motor('back_left', 'bwd', speed)
+    set_motor('back_right', 'fwd', speed)
+def stop():           
+    for m in motors: set_motor(m, 'stop', 0)
+
+# API route
+@app.route('/move', methods=['POST'])
+def move():
     data = request.get_json()
+    command = data['command']
+    speed = data['speed']
+    print(speed, command)
+    if command == 'forward':
+        move_forward(speed)
+    elif command == 'backward':
+        move_backward(speed)
+    elif command == 'left':
+        move_left(speed)
+    elif command == 'right':
+        move_right(speed)
+    elif command == 'stop':
+        stop()
+    else:
+        stop()
+        return jsonify({'status': 'error', 'message': 'Unknown command'}), 400
+    return jsonify({'status': 'ok', 'command': command, 'speed': speed})
+
+# Cleanup on shutdown
+@app.route('/shutdown', methods=['POST'])
+def shutdown():
+    stop()
+    GPIO.cleanup()
+    return jsonify({'status': 'GPIO cleaned up and server ready to shut down'})
+
+if __name__ == '__main__':
     try:
-        duty1 = data['duty1'] # front_right
-        duty2 = data['duty2'] # front_left
-        duty3 = data['duty3'] # back_right
-        duty4 = data['duty4'] # back_left
-    except ValueError:
-        return jsonify({"error": "All values must be numbers"}), 400
-    motor_speeds = [
-        ('front_right', 'fwd' if duty1 > 0 else 'bwd', 100),
-        ('front_left', 'fwd' if duty2 > 0 else 'bwd', 100),
-        ('back_left', 'fwd' if duty3 > 0 else 'bwd', 100),
-        ('back_right', 'fwd' if duty4 > 0 else 'bwd', 100),
-    ]
-    set_motors(motor_speeds)
-    return jsonify({"status": "Successfully triggered motors"})
-
-"""
-    Endpoint for stopping all motors
-"""
-
-@app.route(rule="/stop", methods=["POST"])
-def handle_stop_request():
-    motor_speeds = [
-        ('front_right', 'stop', 0),
-        ('front_left', 'stop', 0),
-        ('back_left', 'stop', 0),
-        ('back_right', 'stop', 0),
-    ]
-    set_motors(motor_speeds)    
-    return jsonify({"status": "Successfully stopped all motors"})
-
-# Running the API
-if __name__ == "__main__":
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
-    
-    # Setup pins
-    for motor in motors.values():
-        GPIO.setup(motor['fwd'], GPIO.OUT)
-        GPIO.setup(motor['bwd'], GPIO.OUT)
-        GPIO.setup(motor['pwm'], GPIO.OUT)
-        motor['pwm_obj'] = GPIO.PWM(motor['pwm'], 100)
-        motor['pwm_obj'].start(0)
-    
-    # Setting host = "0.0.0.0" runs it on localhost
-    app.run(host="0.0.0.0", port=8000, debug=True)
+        app.run(host='0.0.0.0', port=8000)
+    finally:
+        stop()
+        GPIO.cleanup()

@@ -239,7 +239,7 @@ class CameraManager: NSObject, ObservableObject, AVCaptureVideoDataOutputSampleB
     
     func stopRPiConnection() {
         isSendingToRPi = false
-        sendStop()
+        sendStopCommand()
     }
     
     private func saveVideoToPhotoLibrary(videoURL: URL) {
@@ -301,10 +301,10 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 }
                 
                 // Solve for mins/maxes if not nil
-                var xMin: Float = xValues.min()!
-                var xMax: Float = xValues.max()!
-                var yMin: Float = yValues.min()!
-                var yMax: Float = yValues.max()!
+                let xMin: Float = xValues.min()!
+                let xMax: Float = xValues.max()!
+                let yMin: Float = yValues.min()!
+                let yMax: Float = yValues.max()!
                 
                 let cX: Float = ((xMin + xMax)/2)*frameWidth
                 let cY: Float = ((yMin + yMax)/2)*frameHeight
@@ -315,7 +315,7 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 // let dX: Float = cX - cW
                 let dY: Float = cY - cH
 
-                let maxDuty: Float = 4096
+                let maxDuty: Float = 100
                 let scalingFactor: Float = 10
                 var sigmoid: Float = 0
                 let deadFactor: Float = 0.075
@@ -328,15 +328,16 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 }
                 if sigmoid == 0 {
                     // Stop moving if "negligible" movement
-                    if isSendingToRPi { sendStop() }
+                    if isSendingToRPi { sendStopCommand() }
                 } else {
-                    let dutyY: Int = Int(maxDuty*2*sigmoid-maxDuty)
-                    if isSendingToRPi { sendMove(duty1:dutyY,duty2:dutyY,duty3:dutyY,duty4:dutyY) }
+                    let speedY: Int = Int(maxDuty*2*sigmoid-maxDuty)
+                    let directionY: String = speedY > 0 ? "forward" : "backward"
+                    if isSendingToRPi { sendMoveCommand(command:directionY, speed:abs(speedY)) }
                 }
                 
             } else {
                 // Stop moving if no bodies detected
-                if isSendingToRPi { sendStop() }
+                if isSendingToRPi { sendStopCommand() }
             }
             
         }
