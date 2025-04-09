@@ -12,22 +12,22 @@ motors = {
     'back_right':{'fwd': 8, 'bwd': 7, 'pwm': 12},
 }
 
-# Set motor forward enable, backward enable, and PWM pins
-def set_motor(motor, direction, speed=100):
-    fwd = motors[motor]['fwd']
-    bwd = motors[motor]['bwd']
-    pwm = motors[motor]['pwm_obj']
-    if direction == 'fwd':
-        GPIO.output(fwd, GPIO.HIGH)
-        GPIO.output(bwd, GPIO.LOW)
-    elif direction == 'bwd':
-        GPIO.output(fwd, GPIO.LOW)
-        GPIO.output(bwd, GPIO.HIGH)
-    else:
-        GPIO.output(fwd, GPIO.LOW)
-        GPIO.output(bwd, GPIO.LOW)
-        speed = 0
-    pwm.ChangeDutyCycle(speed)
+def set_motors(motor_speeds):
+    for motor, direction, _ in motor_speeds:
+        fwd = motors[motor]['fwd']
+        bwd = motors[motor]['bwd']
+        if direction == 'fwd':
+            GPIO.output(fwd, GPIO.HIGH)
+            GPIO.output(bwd, GPIO.LOW)
+        elif direction == 'bwd':
+            GPIO.output(fwd, GPIO.LOW)
+            GPIO.output(bwd, GPIO.HIGH)
+        else:
+            GPIO.output(fwd, GPIO.LOW)
+            GPIO.output(bwd, GPIO.LOW)
+    for motor, _, speed in motor_speeds:
+        pwm = motors[motor]['pwm_obj']
+        pwm.ChangeDutyCycle(speed)
 
 """
     Endpoint for sending signal to motors
@@ -43,17 +43,14 @@ def handle_move_request():
         duty4 = data['duty4'] # back_left
     except ValueError:
         return jsonify({"error": "All values must be numbers"}), 400
-
     print(duty1, duty2, duty3, duty4)
-    if duty1 > 0: set_motor('front_right', 'fwd', duty1)
-    else: set_motor('front_right', 'bwd', -duty1)
-    if duty2 > 0: set_motor('front_left', 'fwd', duty2)
-    else: set_motor('front_left', 'bwd', -duty2)
-    if duty3 > 0: set_motor('back_left', 'fwd', duty3)
-    else: set_motor('back_left', 'bwd', -duty3)
-    if duty4 > 0: set_motor('back_right', 'fwd', duty4)
-    else: set_motor('back_right', 'bwd', -duty4)
-
+    motor_speeds = [
+        ('front_right', 'fwd' if duty1 > 0 else 'bwd', abs(duty1)),
+        ('front_left', 'fwd' if duty2 > 0 else 'bwd', abs(duty2)),
+        ('back_left', 'fwd' if duty3 > 0 else 'bwd', abs(duty3)),
+        ('back_right', 'fwd' if duty4 > 0 else 'bwd', abs(duty4)),
+    ]
+    set_motors(motor_speeds)
     return jsonify({"status": "Successfully triggered motors"})
 
 """
@@ -62,8 +59,13 @@ def handle_move_request():
 
 @app.route(rule="/stop", methods=["POST"])
 def handle_stop_request():
-    for motor in motors: set_motor(motor, 'stop')
-    
+    motor_speeds = [
+        ('front_right', 'stop'),
+        ('front_left', 'stop'),
+        ('back_left', 'stop'),
+        ('back_right', 'stop'),
+    ]
+    set_motors(motor_speeds)    
     return jsonify({"status": "Successfully stopped all motors"})
 
 # Running the API
