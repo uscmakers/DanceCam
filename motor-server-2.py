@@ -59,6 +59,7 @@ def move():
     data = request.get_json()
     command = data['command']
     speed = data['speed']
+    print(speed, command)
     if command == 'forward':
         move_forward(speed)
     elif command == 'backward':
