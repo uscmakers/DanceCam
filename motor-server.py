@@ -22,6 +22,7 @@ current_motor_speeds = {
 def set_motors(motor_speeds):
     for motor, direction, speed in motor_speeds:
         if speed != current_motor_speeds[motor]:
+            print(motor, direction, speed)
             fwd = motors[motor]['fwd']
             bwd = motors[motor]['bwd']
             pwm = motors[motor]['pwm_obj']
@@ -51,7 +52,6 @@ def handle_move_request():
         duty4 = data['duty4'] # back_left
     except ValueError:
         return jsonify({"error": "All values must be numbers"}), 400
-    print(duty1, duty2, duty3, duty4)
     motor_speeds = [
         ('front_right', 'fwd' if duty1 > 0 else 'bwd', duty1),
         ('front_left', 'fwd' if duty2 > 0 else 'bwd', duty2),
