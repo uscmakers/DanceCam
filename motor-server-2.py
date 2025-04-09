@@ -23,7 +23,7 @@ for motor in motors.values():
     motor['pwm_obj'].start(0)
 
 # Control functions
-def set_motor(motor, direction, speed=100):
+def set_motor(motor, direction, speed):
     fwd = motors[motor]['fwd']
     bwd = motors[motor]['bwd']
     pwm = motors[motor]['pwm_obj']
@@ -39,40 +39,39 @@ def set_motor(motor, direction, speed=100):
         speed = 0
     pwm.ChangeDutyCycle(speed)
 
-def move_forward():   [set_motor(m, 'fwd') for m in motors]
-def move_backward():  [set_motor(m, 'bwd') for m in motors]
-def move_left():
-    set_motor('front_left', 'bwd')
-    set_motor('front_right', 'fwd')
-    set_motor('back_left', 'fwd')
-    set_motor('back_right', 'bwd')
-def move_right():
-    set_motor('front_left', 'fwd')
-    set_motor('front_right', 'bwd')
-    set_motor('back_left', 'bwd')
-    set_motor('back_right', 'fwd')
-def stop():           [set_motor(m, 'stop') for m in motors]
+def move_forward(speed):   [set_motor(m, 'fwd', speed) for m in motors]
+def move_backward(speed):  [set_motor(m, 'bwd', speed) for m in motors]
+def move_left(speed):
+    set_motor('front_left', 'bwd', speed)
+    set_motor('front_right', 'fwd', speed)
+    set_motor('back_left', 'fwd', speed)
+    set_motor('back_right', 'bwd', speed)
+def move_right(speed):
+    set_motor('front_left', 'fwd', speed)
+    set_motor('front_right', 'bwd', speed)
+    set_motor('back_left', 'bwd', speed)
+    set_motor('back_right', 'fwd', speed)
+def stop():           [set_motor(m, 'stop', 0) for m in motors]
 
 # API route
 @app.route('/move', methods=['POST'])
 def move():
     data = request.get_json()
-    command = data.get('command', '').lower()
-
+    command = data['command']
+    speed = data['speed']
     if command == 'forward':
-        move_forward()
+        move_forward(speed)
     elif command == 'backward':
-        move_backward()
+        move_backward(speed)
     elif command == 'left':
-        move_left()
+        move_left(speed)
     elif command == 'right':
-        move_right()
+        move_right(speed)
     elif command == 'stop':
         stop()
     else:
         stop()
         return jsonify({'status': 'error', 'message': 'Unknown command'}), 400
-
     return jsonify({'status': 'ok', 'command': command})
 
 # Cleanup on shutdown
