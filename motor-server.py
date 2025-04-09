@@ -46,12 +46,12 @@ def handle_move_request():
 
     if duty1 > 0: set_motor('front_right', 'fwd', duty1)
     else: set_motor('front_right', 'bwd', duty1)
-    if duty2 > 0: set_motor('front_left', 'fwd', duty1)
-    else: set_motor('front_left', 'bwd', duty1)
-    if duty3 > 0: set_motor('back_left', 'fwd', duty1)
-    else: set_motor('back_left', 'bwd', duty1)
-    if duty4 > 0: set_motor('back_right', 'fwd', duty1)
-    else: set_motor('back_right', 'bwd', duty1)
+    if duty2 > 0: set_motor('front_left', 'fwd', duty2)
+    else: set_motor('front_left', 'bwd', duty2)
+    if duty3 > 0: set_motor('back_left', 'fwd', duty3)
+    else: set_motor('back_left', 'bwd', duty3)
+    if duty4 > 0: set_motor('back_right', 'fwd', duty4)
+    else: set_motor('back_right', 'bwd', duty4)
 
     return jsonify({"status": "Successfully triggered motors"})
 
