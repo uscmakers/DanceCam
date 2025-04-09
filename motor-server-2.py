@@ -72,7 +72,7 @@ def move():
     else:
         stop()
         return jsonify({'status': 'error', 'message': 'Unknown command'}), 400
-    return jsonify({'status': 'ok', 'command': command})
+    return jsonify({'status': 'ok', 'command': command, 'speed': speed})
 
 # Cleanup on shutdown
 @app.route('/shutdown', methods=['POST'])
