@@ -14,7 +14,7 @@ def on_stop():
     PWM.setMotorModel(0, 0, 0, 0)
 
 async def main():
-    robot = RobotClient(os.getenv("CONNECTION_URL"), on_move, on_stop)
+    robot = RobotClient("ws://producti-bunserverloadba-fa9cd61bac9251c5.elb.us-west-2.amazonaws.com/ws", on_move, on_stop)
     await robot.run()
 
 if __name__ == "__main__":

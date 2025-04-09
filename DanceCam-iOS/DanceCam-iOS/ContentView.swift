@@ -1,8 +1,15 @@
+// ContentView.swift
 import SwiftUI
 
-// MARK: - Main View
 struct ContentView: View {
+    @StateObject var wsManager = WebSocketManager()
     var body: some View {
-        VideoFeed()
+        Group {
+            if wsManager.state == .paired {
+                VideoFeed(wsManager: wsManager)
+            } else {
+                ConnectionView(wsManager: wsManager)
+            }
+        }
     }
 }
