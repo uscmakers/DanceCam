@@ -60,10 +60,10 @@ def handle_move_request():
 @app.route(rule="/stop", methods=["POST"])
 def handle_stop_request():
     motor_speeds = [
-        ('front_right', 'stop'),
-        ('front_left', 'stop'),
-        ('back_left', 'stop'),
-        ('back_right', 'stop'),
+        ('front_right', 'stop', 0),
+        ('front_left', 'stop', 0),
+        ('back_left', 'stop', 0),
+        ('back_right', 'stop', 0),
     ]
     set_motors(motor_speeds)    
     return jsonify({"status": "Successfully stopped all motors"})
