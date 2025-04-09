@@ -12,22 +12,30 @@ motors = {
     'back_right':{'fwd': 8, 'bwd': 7, 'pwm': 12},
 }
 
+current_motor_speeds = {
+    'front_right':0,
+    'front_left':0,
+    'back_left':0,
+    'back_right':0,
+}
+
 def set_motors(motor_speeds):
-    for motor, direction, _ in motor_speeds:
-        fwd = motors[motor]['fwd']
-        bwd = motors[motor]['bwd']
-        if direction == 'fwd':
-            GPIO.output(fwd, GPIO.HIGH)
-            GPIO.output(bwd, GPIO.LOW)
-        elif direction == 'bwd':
-            GPIO.output(fwd, GPIO.LOW)
-            GPIO.output(bwd, GPIO.HIGH)
-        else:
-            GPIO.output(fwd, GPIO.LOW)
-            GPIO.output(bwd, GPIO.LOW)
-    for motor, _, speed in motor_speeds:
-        pwm = motors[motor]['pwm_obj']
-        pwm.ChangeDutyCycle(speed)
+    for motor, direction, speed in motor_speeds:
+        if speed != current_motor_speeds[motor]:
+            fwd = motors[motor]['fwd']
+            bwd = motors[motor]['bwd']
+            pwm = motors[motor]['pwm_obj']
+            if direction == 'fwd':
+                GPIO.output(fwd, GPIO.HIGH)
+                GPIO.output(bwd, GPIO.LOW)
+            elif direction == 'bwd':
+                GPIO.output(fwd, GPIO.LOW)
+                GPIO.output(bwd, GPIO.HIGH)
+            else:
+                GPIO.output(fwd, GPIO.LOW)
+                GPIO.output(bwd, GPIO.LOW)
+            pwm.ChangeDutyCycle(speed)
+            current_motor_speeds[motor] = speed
 
 """
     Endpoint for sending signal to motors
