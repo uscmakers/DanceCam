@@ -1,18 +1,19 @@
 {
-  "name": "server",
-  "module": "index.ts",
-  "type": "module",
-  "scripts": {
-    "dev": "bun run --watch index.ts"
-  },
-  "devDependencies": {
-    "@types/aws-lambda": "8.10.147",
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "sst": "3.6.20"
-  }
+    "name": "server",
+    "module": "index.ts",
+    "type": "module",
+    "scripts": {
+        "dev": "bun run --watch index.ts",
+        "deploy": "npx sst deploy --stage production"
+    },
+    "devDependencies": {
+        "@types/aws-lambda": "8.10.147",
+        "@types/bun": "latest"
+    },
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    },
+    "dependencies": {
+        "sst": "3.6.20"
+    }
 }

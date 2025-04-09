@@ -107,7 +107,7 @@ class RobotClient:
 load_dotenv()
 
 async def main():
-    robot = RobotClient(os.getenv("CONNECTION_URL"))
+    robot = RobotClient("ws://producti-bunserverloadba-fa9cd61bac9251c5.elb.us-west-2.amazonaws.com/ws")
     await robot.run()
 
 if __name__ == "__main__":

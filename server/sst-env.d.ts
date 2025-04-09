@@ -3,7 +3,19 @@
 /* eslint-disable */
 /* deno-fmt-ignore-file */
 
-/// <reference path="../sst-env.d.ts" />
+declare module "sst" {
+  export interface Resource {
+    "BunServer": {
+      "service": string
+      "type": "sst.aws.Service"
+      "url": string
+    }
+    "DanceVPC": {
+      "type": "sst.aws.Vpc"
+    }
+  }
+}
+/// <reference path="sst-env.d.ts" />
 
 import "sst"
 export {}

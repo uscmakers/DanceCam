@@ -1,6 +1,6 @@
 FROM oven/bun
 
-COPY server/bun.lockb .
+COPY bun.lock .
 COPY package.json .
 
 RUN bun install --frozen-lockfile

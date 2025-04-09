@@ -44,8 +44,11 @@ struct RecordButton: View {
     var body: some View {
         Button(action: {
             if !cameraManager.isRecording {
-                timerIsActive = true
-                startTimer()
+                if (!timerIsActive) {
+                    startTimer()
+                } else {
+                    stopTimer()
+                }
             } else {
                 cameraManager.stopRecording()
             }
@@ -63,8 +66,8 @@ struct RecordButton: View {
         }
     }
     
-    // Function to start timer
     private func startTimer() {
+        self.timerIsActive = true
         self.timeRemaining = cameraManager.timeRemaining
         self.timer?.invalidate() // Invalidate any existing timer
         
@@ -78,6 +81,12 @@ struct RecordButton: View {
                 self.timerIsActive = false
             }
         }
+    }
+    
+    private func stopTimer() {
+        self.timer?.invalidate()
+        self.timerIsActive = false
+        self.timeRemaining = 0
     }
 }
 
