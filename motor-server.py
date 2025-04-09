@@ -34,7 +34,7 @@ def set_motors(motor_speeds):
             else:
                 GPIO.output(fwd, GPIO.LOW)
                 GPIO.output(bwd, GPIO.LOW)
-            pwm.ChangeDutyCycle(speed)
+            pwm.ChangeDutyCycle(abs(speed))
             current_motor_speeds[motor] = speed
 
 """
@@ -53,10 +53,10 @@ def handle_move_request():
         return jsonify({"error": "All values must be numbers"}), 400
     print(duty1, duty2, duty3, duty4)
     motor_speeds = [
-        ('front_right', 'fwd' if duty1 > 0 else 'bwd', abs(duty1)),
-        ('front_left', 'fwd' if duty2 > 0 else 'bwd', abs(duty2)),
-        ('back_left', 'fwd' if duty3 > 0 else 'bwd', abs(duty3)),
-        ('back_right', 'fwd' if duty4 > 0 else 'bwd', abs(duty4)),
+        ('front_right', 'fwd' if duty1 > 0 else 'bwd', duty1),
+        ('front_left', 'fwd' if duty2 > 0 else 'bwd', duty2),
+        ('back_left', 'fwd' if duty3 > 0 else 'bwd', duty3),
+        ('back_right', 'fwd' if duty4 > 0 else 'bwd', duty4),
     ]
     set_motors(motor_speeds)
     return jsonify({"status": "Successfully triggered motors"})
