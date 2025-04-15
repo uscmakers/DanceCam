@@ -176,3 +176,6 @@ dist
 
 # sst
 .sst
+
+files
+*yt-dlp

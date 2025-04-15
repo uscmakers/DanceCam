@@ -7,13 +7,15 @@
         "deploy": "npx sst deploy --stage production"
     },
     "devDependencies": {
-        "@types/aws-lambda": "8.10.147",
+        "@types/a ws-lambda": "8.10.147",
         "@types/bun": "latest"
     },
     "peerDependencies": {
         "typescript": "^5.0.0"
     },
     "dependencies": {
-        "sst": "3.6.20"
+        "sst": "3.6.20",
+        "youtube-sr": "^4.3.11",
+        "yt-dlp-wrap": "^2.3.12"
     }
 }
