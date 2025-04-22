@@ -57,6 +57,7 @@ function sanitizeFilename(name: string): string {
     return name
         .replace(/[\/\\?%*:|"<>]/g, '') // Remove potentially problematic chars
         .replace(/\s+/g, '_') // Replace whitespace with underscores
+        .replace(/[\(\)]/g, '') // Remove parentheses
         .substring(0, 100); // Limit length
 }
 
@@ -78,7 +79,12 @@ function getPublicUrl(req: Request, server: Server, filename: string): string {
 async function downloadAudio(
     videoUrl: string,
     outputFilename: string
-): Promise<{ success: boolean; error?: string; filePath?: string }> {
+): Promise<{
+    success: boolean;
+    args: string[];
+    error?: string;
+    filePath?: string;
+}> {
     const outputPath = path.join(FILES_DIR, outputFilename);
     const outputTemplate = path.join(FILES_DIR, '%(title)s.%(ext)s'); // Let yt-dlp handle sanitization better if needed
 
@@ -92,6 +98,8 @@ async function downloadAudio(
     );
 
     const args = [
+        '--cookies',
+        'abby-cookies.txt',
         '-x', // Extract audio
         '--audio-format',
         'mp3',
@@ -126,6 +134,7 @@ async function downloadAudio(
             error: `yt-dlp failed: ${
                 stderr || stdout || `Exit code ${exitCode}`
             }`,
+            args,
         };
     }
 
@@ -133,7 +142,7 @@ async function downloadAudio(
     const potentialFinalPath = path.join(FILES_DIR, `${outputFilename}.mp3`);
     if (await Bun.file(potentialFinalPath).exists()) {
         console.log(`Download successful: ${potentialFinalPath}`);
-        return { success: true, filePath: potentialFinalPath };
+        return { success: true, filePath: potentialFinalPath, args };
     } else {
         // This part is tricky if yt-dlp uses a different sanitized title.
         // A more robust way would be to parse yt-dlp's output or list the dir
@@ -141,7 +150,7 @@ async function downloadAudio(
         console.warn(
             `Could not confirm exact output file path for: ${outputFilename}.mp3`
         );
-        return { success: true, filePath: potentialFinalPath }; // Assume success but path might be slightly off
+        return { success: true, filePath: potentialFinalPath, args }; // Assume success but path might be slightly off
     }
 }
 
@@ -358,12 +367,14 @@ const server = Bun.serve<WebSocketData>({
                         ); // Pass base filename
                         if (
                             !audioDownloadResult.success ||
-                            !audioDownloadResult.filePath
+                            !audioDownloadResult.filePath ||
+                            true
                         ) {
                             return new Response(
                                 JSON.stringify({
                                     error: 'Failed to download song audio',
                                     details: audioDownloadResult.error,
+                                    args: audioDownloadResult.args,
                                 }),
                                 {
                                     status: 500,
