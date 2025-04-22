@@ -277,7 +277,7 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
         DispatchQueue.main.async { [weak self] in
             self?.poses = newLandmarks
             
-            guard var isSendingToRPi = self?.isSendingToRPi else {
+            guard let isSendingToRPi = self?.isSendingToRPi else {
                 return
             }
             
@@ -305,36 +305,84 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 let xMax: Float = xValues.max()!
                 let yMin: Float = yValues.min()!
                 let yMax: Float = yValues.max()!
+                let bodyWidth: Float = (xMax-xMin)*frameWidth
+                let bodyHeight: Float = (yMax-yMin)*frameHeight
+                let bodyArea: Float = bodyWidth*bodyHeight
                 
-                let cX: Float = ((xMin + xMax)/2)*frameWidth
-                let cY: Float = ((yMin + yMax)/2)*frameHeight
+                // Repeat for torso points only
+                var xTorsoValues: [Float] = []
+                var yTorsoValues: [Float] = []
+                for dancer in self!.poses {
+                    for xy in [dancer[12], dancer[11], dancer[24], dancer[23]] {
+                        xTorsoValues.append(xy.x)
+                        yTorsoValues.append(xy.y)
+                    }
+                }
+                let xTorsoMin: Float = xTorsoValues.min()!
+                let xTorsoMax: Float = xTorsoValues.max()!
+                let yTorsoMin: Float = yTorsoValues.min()!
+                let yTorsoMax: Float = yTorsoValues.max()!
+                let torsoWidth: Float = (xTorsoMax-xTorsoMin)*frameWidth
+                let torsoHeight: Float = (yTorsoMax-yTorsoMin)*frameHeight
+                let torsoArea: Float = torsoWidth*torsoHeight
                 
-                let cW: Float = frameWidth/2
-                let cH: Float = frameHeight/2
+                let frameArea: Float = frameWidth*frameHeight
+                let areaRatio: Float = torsoArea/frameArea
                 
-                // let dX: Float = cX - cW
-                let dY: Float = cY - cH
-
+                let pX: Float = ((xMin + xMax)/2)*frameWidth
+                let pY: Float = ((yMin + yMax)/2)*frameHeight
+                
+                let cX: Float = frameWidth/2
+                let cY: Float = frameHeight/2
+                                               
+                let dY: Float = pY - cY
+                
                 let maxDuty: Float = 100
-                let scalingFactor: Float = 10
-                var sigmoid: Float = 0
-                let deadFactor: Float = 0.075
-                let deltaDead: Float = deadFactor*frameHeight
-                if (dY < -1 * deltaDead){
-                    sigmoid = 1/(1+exp(-(dY+deltaDead)/frameHeight/2*scalingFactor))-0.02
+                var dutyX: Float = 0 // Movement differential on left-right axis
+                var dutyY: Float = 0 // Movement differential on forward-backward axis
+                let scalingFactorXPos: Float = 6
+                let scalingFactorXNeg: Float = 12
+                let threshRatioX: Float = 0.05
+                let deadRatioX: Float = 0.01
+                let threshRangeX: Float = 0.04
+                let scalingFactorY: Float = 25
+                let deadFactorY: Float = 0.075
+                let deltaDeadY: Float = deadFactorY*frameHeight
+                
+                var speedX: Int = 0
+                var speedY: Int = 0
+                
+                if (dY < -1 * deltaDeadY){
+                    dutyY = 1/(1+exp(-(dY+deltaDeadY)/frameHeight/2*scalingFactorY))-0.02
                 }
-                else if (dY > deltaDead){
-                    sigmoid = 1/(1+exp(-(dY-deltaDead)/frameHeight/2*scalingFactor))+0.02
+                else if (dY > deltaDeadY){
+                    dutyY = 1/(1+exp(-(dY-deltaDeadY)/frameHeight/2*scalingFactorY))+0.02
                 }
-                if sigmoid == 0 {
-                    // Stop moving if "negligible" movement
-                    if isSendingToRPi { sendStopCommand() }
-                } else {
-                    let speedY: Int = Int(maxDuty*2*sigmoid-maxDuty)
-                    let directionY: String = speedY > 0 ? "forward" : "backward"
+                
+                if (areaRatio > threshRatioX+deadRatioX){
+                    dutyX = 1/(1+exp(-(areaRatio-threshRatioX)/threshRangeX*scalingFactorXPos))-0.02
+                }
+                else if (areaRatio < threshRatioX-deadRatioX){
+                    dutyX = 1/(1+exp(-(areaRatio-threshRatioX)/threshRangeX*scalingFactorXNeg))+0.02
+                }
+
+                speedX = max(-100, min(100, Int(maxDuty*2*dutyX-maxDuty)))
+                speedY = Int(maxDuty*2*dutyY-maxDuty)
+                
+                if (dutyX == 0 && dutyY == 0) {
+                    if isSendingToRPi {sendStopCommand()}
+                }
+                else if (dutyY != 0) {
+                    let directionY: String = speedY > 0 ? "backward" : "forward"
                     if isSendingToRPi { sendMoveCommand(command:directionY, speed:abs(speedY)) }
                 }
-                
+                else if (dutyX != 0) {
+                    let directionX: String = speedX > 0 ? "right" : "left"
+                    if isSendingToRPi { sendMoveCommand(command:directionX, speed:abs(speedX)) }
+                }
+                else {
+                    if isSendingToRPi {sendStopCommand()}
+                }
             } else {
                 // Stop moving if no bodies detected
                 if isSendingToRPi { sendStopCommand() }

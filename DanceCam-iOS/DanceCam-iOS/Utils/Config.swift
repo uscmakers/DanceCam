@@ -12,3 +12,4 @@ let RUN_MOTOR: Bool = true // Set to true to make requests to server to run moto
 
 let DRAW_LANDMARKS: Bool = true // Set to true to draw landmarks for each detected body on view, false to not draw landmarks
 let DRAW_BBOX: Bool = true // Set to true to draw bounding box for each detected body on view, false to not draw bounding box
+let DRAW_TORSO: Bool = false // Set to true to draw landmarks and bounding box around only the torso not the whole body

@@ -27,7 +27,9 @@ struct PoseVisualization: View {
             var maxY: Int = 0
                         
             for dancer in poses {
-                for xy in dancer {
+                var landmarks = dancer
+                if (DRAW_TORSO) { landmarks = [dancer[12], dancer[11], dancer[24], dancer[23]] }
+                for xy in landmarks {
                     var pX: Int = Int(xy.y * Float(size.width))
                     let pY: Int = Int(xy.x * Float(size.height))
                     
