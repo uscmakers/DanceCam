@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,7 @@
 		0799CB542CEC45EE00215739 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0799CB532CEC45ED00215739 /* Camera.swift */; };
 		0799CB572CEC462400215739 /* Landmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0799CB562CEC462200215739 /* Landmarks.swift */; };
 		0799CB5D2CEC46BE00215739 /* Communcation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0799CB5C2CEC46B800215739 /* Communcation.swift */; };
+		5D47EF982D9BA6450042D7D1 /* SpotifyiOS in Frameworks */ = {isa = PBXBuildFile; productRef = 5D47EF972D9BA6450042D7D1 /* SpotifyiOS */; };
 		D3D63FC60F3CC5A542D44B06 /* Pods_DanceCam_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BDA204C630A21F6DE7ACA44 /* Pods_DanceCam_iOS.framework */; };
 		FC2E02222CEC83DE007C1F74 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2E02212CEC83D8007C1F74 /* Config.swift */; };
 /* End PBXBuildFile section */
@@ -50,6 +51,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3D63FC60F3CC5A542D44B06 /* Pods_DanceCam_iOS.framework in Frameworks */,
+				5D47EF982D9BA6450042D7D1 /* SpotifyiOS in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,6 +185,9 @@
 				Base,
 			);
 			mainGroup = 0792B1782CD9DDDE008284A8;
+			packageReferences = (
+				5D47EF962D9BA6450042D7D1 /* XCRemoteSwiftPackageReference "ios-sdk" */,
+			);
 			productRefGroup = 0792B1822CD9DDDE008284A8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -378,7 +383,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DanceCam-iOS/Preview Content\"";
-				DEVELOPMENT_TEAM = 79XZXQ68F6;
+				DEVELOPMENT_TEAM = 6VA6DMB345;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DanceCam-iOS/Info.plist";
@@ -395,7 +400,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "dancecam-";
+				PRODUCT_BUNDLE_IDENTIFIER = dancecam;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -414,7 +419,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DanceCam-iOS/Preview Content\"";
-				DEVELOPMENT_TEAM = 79XZXQ68F6;
+				DEVELOPMENT_TEAM = 6VA6DMB345;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DanceCam-iOS/Info.plist";
@@ -431,7 +436,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "dancecam-";
+				PRODUCT_BUNDLE_IDENTIFIER = dancecam;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -462,6 +467,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5D47EF962D9BA6450042D7D1 /* XCRemoteSwiftPackageReference "ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/spotify/ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5D47EF972D9BA6450042D7D1 /* SpotifyiOS */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5D47EF962D9BA6450042D7D1 /* XCRemoteSwiftPackageReference "ios-sdk" */;
+			productName = SpotifyiOS;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0792B1792CD9DDDE008284A8 /* Project object */;
 }
