@@ -91,13 +91,13 @@ def move():
         move_left(speed)
     elif command == 'right':
         move_right(speed)
-    elif command == 'backward_left':
+    elif command == 'backward left':
         move_backward_left(speed)
-    elif command == 'backward_right':
+    elif command == 'backward right':
         move_backward_right(speed)
-    elif command == 'forward_left':
+    elif command == 'forward left':
         move_forward_left(speed)
-    elif command == 'forward_right':
+    elif command == 'forward right':
         move_forward_right(speed)
     elif command == 'stop':
         stop()
