@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import AVFoundation
 
 struct GalleryButton: View {
     var disabled: Bool
@@ -37,6 +38,9 @@ struct RecordButton: View {
     @State private var timeRemaining = 0
     @State private var timerIsActive = false
     
+    // Audio Variable
+    @ObservedObject var audioPlayer: AudioPlayer
+    
     var isRecording: Bool {
         return cameraManager.isRecording
     }
@@ -50,6 +54,7 @@ struct RecordButton: View {
                     stopTimer()
                 }
             } else {
+                audioPlayer.stopAudio()
                 cameraManager.stopRecording()
             }
         }) {
@@ -77,6 +82,7 @@ struct RecordButton: View {
             } else {
                 t.invalidate()
                 cameraManager.startRecording()  // Start the camera recording
+                audioPlayer.playAudio()        // Start the audio player
                 cameraManager.isRecording = true
                 self.timerIsActive = false
             }
@@ -117,6 +123,8 @@ struct FlipCameraButton: View {
 
 struct BottomControls: View {
     @StateObject var cameraManager: CameraManager
+    @ObservedObject var audioPlayer: AudioPlayer
+
     var disabled: Bool {
         return cameraManager.isRecording || cameraManager.isFlipping
     }
@@ -130,8 +138,10 @@ struct BottomControls: View {
                 FlipCameraButton(cameraManager: cameraManager, disabled: disabled)
                     .padding(.trailing, 30)
             }
-            
-            RecordButton(cameraManager: cameraManager)
+            RecordButton(
+                cameraManager: cameraManager,
+                audioPlayer: audioPlayer
+            )
         }
     }
 }

@@ -31,6 +31,8 @@ struct VideoFeed: View {
     @StateObject private var cameraManager = CameraManager()
     @State private var numDancers = 1
     
+    @StateObject var audioPlayer = AudioPlayer()
+    
     var body: some View {
         ZStack {
             CameraPreview(session: cameraManager.captureSession)
@@ -43,7 +45,7 @@ struct VideoFeed: View {
                 shouldDisplay: cameraManager.isDisplayingViz
             )
         }.overlay(
-            ControlsOverlay(cameraManager: cameraManager)
+            ControlsOverlay(cameraManager: cameraManager, audioPlayer: audioPlayer)
         )
     }
 }

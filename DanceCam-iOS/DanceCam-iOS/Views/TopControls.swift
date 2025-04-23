@@ -13,9 +13,12 @@ struct TopControls: View {
     @State private var showingMusic = false
     @State private var showingSettings = false
     
+    // Audio Player Variable
+    @ObservedObject var audioPlayer: AudioPlayer
+    
     // Possible timer options array
     @State var timeSelect = [0, 5, 10, 15]
-        
+    
     var body: some View {
         HStack {
             Button(action: {
@@ -40,7 +43,10 @@ struct TopControls: View {
             .background(.black.opacity(0.4))
             .clipShape(Circle())
             .sheet(isPresented: $showingMusic) {
-                MusicMenu(cameraManager: self.cameraManager)
+                MusicMenu(
+                    cameraManager: self.cameraManager,
+                    audioPlayer: self.audioPlayer
+                )
             }
             .sheet(isPresented: $showingSettings) {
                 SettingsMenu(cameraManager: self.cameraManager)
