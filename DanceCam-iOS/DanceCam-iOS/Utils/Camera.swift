@@ -340,12 +340,12 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 let maxDuty: Float = 100
                 var dutyX: Float = 0 // Movement differential on left-right axis
                 var dutyY: Float = 0 // Movement differential on forward-backward axis
-                let scalingFactorXPos: Float = 6
-                let scalingFactorXNeg: Float = 12
+                let scalingFactorXPos: Float = 12
+                let scalingFactorXNeg: Float = 24
                 let threshRatioX: Float = 0.05
                 let deadRatioX: Float = 0.01
                 let threshRangeX: Float = 0.04
-                let scalingFactorY: Float = 25
+                let scalingFactorY: Float = 40
                 let deadFactorY: Float = 0.075
                 let deltaDeadY: Float = deadFactorY*frameHeight
                 
@@ -371,6 +371,19 @@ extension CameraManager: PoseLandmarkerLiveStreamDelegate {
                 
                 if (dutyX == 0 && dutyY == 0) {
                     if isSendingToRPi {sendStopCommand()}
+                }
+                else if (dutyX != 0 && dutyY != 0) {
+                    var directionDiagonal: String = ""
+                    if (speedX > 0 && speedY > 0) {
+                        directionDiagonal = "backward right"
+                    } else if (speedX > 0 && speedY < 0) {
+                        directionDiagonal = "forward right"
+                    } else if (speedX < 0 && speedY > 0) {
+                        directionDiagonal = "backward left"
+                    } else if (speedX < 0 && speedY < 0) {
+                        directionDiagonal = "forward left"
+                    }
+                    if isSendingToRPi { sendMoveCommand(command:directionDiagonal, speed:max(abs(speedY),abs(speedX)))}
                 }
                 else if (dutyY != 0) {
                     let directionY: String = speedY > 0 ? "backward" : "forward"

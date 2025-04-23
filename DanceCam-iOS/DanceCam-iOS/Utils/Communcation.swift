@@ -20,7 +20,10 @@ func sendMoveCommand(command: String, speed: Int) {
     
     // Add headers (e.g., Content-Type for JSON)
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-    
+    print("direction")
+    print(command)
+    print("speed")
+    print(speed)
     // Create the body data
     let data: [String: Any] = [
         "command": command,
