@@ -12,14 +12,6 @@ struct SettingsMenu: View {
 
     var body: some View {
         List {
-            Toggle(isOn: $cameraManager.isDisplayingViz) {
-                Text("Show Visualization")
-            }
-
-            Toggle(isOn: $cameraManager.isSendingToRPi) {
-                Text("Send Data to RPi")
-            }
-            
             HStack {
                 Text("# of People to Track")
                 Spacer()

@@ -54,15 +54,33 @@ struct TopControls: View {
             
             Spacer()
             
-            Button(action: {
-                showingSettings.toggle()
-            }) {
-                Image(systemName: "gear")
-                    .font(.system(size: 20))
-                    .padding(12)
-                    .background(.black.opacity(0.4))
-                    .clipShape(Circle())
-                    .accentColor(.white)
+            HStack {
+                Button(action: {
+                    if cameraManager.isSendingToRPi {
+                        cameraManager.stopRPiConnection()
+                    } else {
+                        cameraManager.startRPiConnection()
+                    }
+                }) {
+                    Image(systemName: cameraManager.isSendingToRPi ? "antenna.radiowaves.left.and.right" : "antenna.radiowaves.left.and.right.slash")
+                        .foregroundColor(cameraManager.isSendingToRPi ? .yellow : .white)
+                        .font(.system(size: 20))
+                        .padding(12)
+                        .background(.black.opacity(0.4))
+                        .clipShape(Circle())
+                }
+                .padding(.leading)
+                
+                Button(action: {
+                    showingSettings.toggle()
+                }) {
+                    Image(systemName: "gear")
+                        .font(.system(size: 20))
+                        .padding(12)
+                        .background(.black.opacity(0.4))
+                        .clipShape(Circle())
+                        .accentColor(.white)
+                }
             }
 
         }
