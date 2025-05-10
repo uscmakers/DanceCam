@@ -12,7 +12,7 @@ func sendStopCommand() {
 }
 
 func sendMoveCommand(command: String, speed: Int) {
-    guard let url = URL(string: "http://172.20.10.2:8000/move") else { return }
+    guard let url = URL(string: "http://172.20.10.9:8000/move") else { return }
     
     // Create a URLRequest object
     var request = URLRequest(url: url)
